@@ -1,0 +1,224 @@
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container-fluid">
+            <%if(category){%>
+            <h1 class="page-title"><%=category%><span></span></h1>
+            <%} else {%>
+                <h1 class="page-title">ALL<span></span></h1>
+                <%}%>
+  
+        </div><!-- End .container-fluid -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                
+            </ol>
+        </div><!-- End .container-fluid -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <div style="margin-top: 50px;margin-bottom: 80px;" class="toolbox">
+                <div class="toolbox-left">
+                    <!-- <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a> -->
+                </div><!-- End .toolbox-left -->
+
+                <div class="toolbox-center">
+                    <div class="toolbox-info">
+                        Showing <span > <%=total%> of <%=data.length%> </span> Products
+                    </div><!-- End .toolbox-info -->
+                </div><!-- End .toolbox-center -->
+
+                <div class="toolbox-right">
+                    <div class="toolbox-sort">
+                        <label for="sortby">Sort by:</label>
+                        <div class="select-custom">
+                            <select name="sortby" id="sortby" class="form-control">
+                                <option value="popularity">Price</option>
+                                <option value="-1">High to Low</option>
+                                <option value="1">Low to High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End .toolbox -->
+            
+            <div class="products">
+            
+                <div class="row">
+                    <%totalProducts.forEach(item=>{%>
+
+                  
+                    <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
+                        <div class="product">
+                            <figure class="product-media">
+                                <span class="product-label label-new">New</span>
+                                <a href="/product/<%=item._id%>">
+                                    <img src="/uploads/<%=item.images[0]%>" alt="Product image" class="product-image">
+                                </a>
+
+                                <div class="product-action-vertical">
+                                    <a onclick="wishList('<%=item._id%>')" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                </div><!-- End .product-action -->
+
+                                <div class="product-action action-icon-top">
+                                    <a href="/cart/<%=item._id%>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="/product/<%=item._id%>" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                </div><!-- End .product-action -->
+                            </figure><!-- End .product-media -->
+
+                            <div class="product-body">
+                                <div class="product-cat">
+                                    <a href="#"><%=item.category%></a>
+                                </div><!-- End .product-cat -->
+                                <h3 class="product-title"><a href="/product/<%=item._id%>"><%=item.productName%></a></h3><!-- End .product-title -->
+                                <div class="product-price">
+                                   RS.<%=item.offPrice%>
+                                </div><!-- End .product-price -->
+                               
+
+                                <div  class="product-nav-thumbs">
+                                    <a style="background: white;color: goldenrod;"><span style="display: inline;" ><%=item.strapColour%></span></a>
+                                </div><!-- End .product-nav -->
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                    <%})%>
+                   
+                </div><!-- End .row -->
+                <div style="display: flex;justify-content: center;" class="pagination-area mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                        <%if(page){%>
+                            <%for(i=0;i<= page;i++){%>
+                            <li  class="page-item active"><a href="/allproducts/?pagenumber=<%=(i+1)%>" class="page-link" ><%=(i+1)%></a></li>
+                            <input id="pagenumber" value="<%=(i+1)%>" type="hidden"> 
+                            <%}%>
+                            <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>  
+                            
+                        <%}%>
+                        </ul>
+
+                    </nav>
+                </div>
+                <div class="load-more-container text-center">
+                    <a href="/allProducts" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+                </div><!-- End .load-more-container -->
+            </div><!-- End .products -->
+
+            <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+            
+        </div><!-- End .container-fluid -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+<script>
+
+  
+   document.getElementById("sortby").addEventListener("change", function() {
+    var selectedValue = this.value;
+    if (selectedValue === "-1") {
+        highPrice(-1);
+    } else if (selectedValue === "1") {
+        highPrice(1);
+    }
+});
+
+function highPrice(order) {
+    // Your function logic here
+    // The 'order' parameter will be either -1 (High to Low) or 1 (Low to High)
+    let pagenumber = $('#pagenumber').val
+   
+    $.ajax({
+        url:'/price-high',
+        method:'put',
+        data:{order:order,pagenumber:pagenumber},
+        success:function(response){
+         if(response.status){
+            location.reload()
+         }
+        },
+        error:function(error){
+
+        }
+    })
+   
+}
+
+
+
+
+
+
+function wishList(productId){
+    $.ajax({
+        url:'/wishlist',
+        method:'post',
+        data:{productId : productId},
+        success:function(response){ 
+            console.log(response.status,"stat")
+            if(response.status==="1"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'successfully added  to Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }else if(response.status ==="2"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'product is already in Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }
+            else if(response.status === "4"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'error',
+  title: 'please login to add to wishlist',
+  showConfirmButton: false,
+  timer: 1500
+}).then(()=>{location.href='/login'})
+            }
+            else{
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'successfully added new product to Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }
+            
+        },error:function(error){Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'failed adding to Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})}
+    })
+}
+ 
+
+   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,96 @@
+<style>
+     .form-box {
+    margin-top: 100px;
+    max-width: 575px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    padding: 2.2rem 2rem 4.4rem;
+    box-shadow: 0 3px 16px rgba(51,51,51,0.1)
+}
+
+#signupbutton{
+        display: flexbox;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+  
+   
+</style>
+
+
+
+<div class="form-box">
+    <div class="form-tab">
+        <ul class="nav nav-pills nav-fill" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">REGISTER</a>
+            </li>
+           
+        </ul>
+        <div class="tab-content" id="tab-content-5">
+            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                <% if(errMessage != ""){ %>
+                    <div class="alert alert-warning alert-dismissible fade show"  role="alert" id="warningAlert" style="padding: 10px; background-color: lightsalmon;">
+                      <%=  errMessage %>
+                      <button type="button" class="close" onclick="closeAlert()" aria-label="Close" fdprocessedid="bi0wev">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                 <% } %>
+
+              
+                 <form action="/registers" method="post">
+                    <div class="form-group">
+                       
+                        <label for="register-password">UserName *</label>
+                        <input type="text" class="form-control" id="register-password" name="name" required>
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group">
+                        <label for="register-email">Your email address *</label>
+                        <input type="email" class="form-control" id="register-email" name="email" required>
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group">
+                        <label for="register-password">Mobile Number *</label>
+                        <input type="tel" class="form-control" id="register-password" name="mobile" required>
+                    </div><!-- End .form-group -->
+
+
+                    <div class="form-group">
+                        <label for="register-password">Password *</label>
+                        <input type="password" class="form-control" id="register-password" name="password" required>
+                    </div><!-- End .form-group -->
+
+                    <div class="form-group">
+                        <label for="register-password">Confirm Password *</label>
+                        <input type="password" class="form-control" id="register-password" name="password1" required>
+                    </div><!-- End .form-group -->
+
+
+                    <div class="form-footer" id="signupbutton">
+                        <button type="submit" class="btn btn-outline-primary-2">
+                            <span>REGISTER</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </button>
+
+                      
+                    </div><!-- End .form-footer -->
+                </form>
+
+
+               
+            </div><!-- .End .tab-pane -->
+        </div>
+    </div>
+</div>
+<script>
+    function closeAlert(){
+        $('#warningAlert').alert('close'); 
+    }
+</script>

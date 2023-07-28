@@ -1,0 +1,281 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+<head>
+    <link rel="stylesheet" href="@sweetalert2/themes/dark/dark.css">
+</head>
+<style>
+    button {
+        font-weight: bold;
+        color: white;
+        border-radius: 2rem;
+        width: fit-content;
+        height: fit-content;
+        border: none;
+        background-color: rgb(96, 206, 96);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button .span-mother {
+        display: flex;
+        overflow: hidden;
+    }
+
+    button:hover .span-mother {
+        position: absolute;
+    }
+
+    button:hover .span-mother span {
+        transform: translateY(1.2em);
+    }
+
+    button .span-mother span:nth-child(1) {
+        transition: .2s;
+    }
+
+    button .span-mother span:nth-child(2) {
+        transition: .3s;
+    }
+
+    button .span-mother span:nth-child(3) {
+        transition: .4s;
+    }
+
+    button .span-mother span:nth-child(4) {
+        transition: .5s;
+    }
+
+    button .span-mother span:nth-child(5) {
+        transition: .6s;
+    }
+
+    button .span-mother span:nth-child(6) {
+        transition: .7s;
+    }
+
+    button .span-mother2 {
+        display: flex;
+        position: absolute;
+        overflow: hidden;
+    }
+
+    button .span-mother2 span {
+        transform: translateY(-1.2em);
+    }
+
+    button:hover .span-mother2 span {
+        transform: translateY(0);
+    }
+
+    button .span-mother2 span {
+        transition: .2s;
+    }
+
+    button .span-mother2 span:nth-child(2) {
+        transition: .3s;
+    }
+
+    button .span-mother2 span:nth-child(3) {
+        transition: .4s;
+    }
+
+    button .span-mother2 span:nth-child(4) {
+        transition: .5s;
+    }
+
+    button .span-mother2 span:nth-child(5) {
+        transition: .6s;
+    }
+
+    button .span-mother2 span:nth-child(6) {
+        transition: .7s;
+    }
+
+    #edit {
+        background-color: goldenrod;
+    }
+</style>
+
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="container mt-5 bg-light">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header  text-white">
+
+                            <h3 class="mb-0">Add Category</h3>
+                        </div>
+                        <!-- <% if(errMessage != ""){ %> -->
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="warningAlert"
+                            style="padding: 10px; background-color: rgb(96, 206, 96);width: fit-content;">
+                            <!-- <%=  errMessage %> -->
+                            <button type="button" class="close animated-button" onclick="closeAlert()"
+                                aria-label="Close" style="background-color:  rgb(96, 206, 96);border: none;"
+                                fdprocessedid="bi0wev">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <!-- <% } %> -->
+                        <div class="card-body">
+
+                            <form id="categoryForm" class="needs-validation" action="/admin/category" method="post"
+                                novalidate>
+                                <div class="form-group mt-3">
+                                    <label for="categoryName">Category Name</label>
+                                    <input type="text" class="form-control" id="categoryName"
+                                        placeholder="Enter category name" name="category" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a category name.
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit">submit</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Added Categories:</h4>
+                            <table class="display" id="myTable">
+                                <thead>
+                                    <tr>
+
+                                        <th scope="col">Category</th>
+                                        <th scope="col">option</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+                                        <th><input type="text" id="confirm-edit" value="<%=category[0].category%>"></th>
+                                        <br>
+                                        <th><button onclick="confirmEdit('<%=category[0]._id%>')">confirm</button></a>
+                                        </th>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section> <!-- content-main end// -->
+
+</main>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script src="sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function closeAlert() {
+        $('#warningAlert').alert('close')
+    }
+
+    // JavaScript for form validation
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    });
+
+    function confirmEdit(categoryId) {
+        let category = document.getElementById('confirm-edit').value
+        $.ajax({
+            url: `/admin/editCategory`,
+            method: 'put',
+            data: { categoryId: categoryId, category: category }, // Data to send with the request 
+            success: function (response) {
+                if (response.status) {
+                    // displayConfirmation('successfully edited').then(e=>{
+
+                    // })
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'successfully edited category',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.href = '/admin/category'
+                    })
+
+
+
+
+                }
+                else {
+                    displayErrorMessage('failed in editing category')
+                }
+            },
+            error: function () {
+                displayErrorMessage('Failed to edit category.');
+                console.log(error)
+            }
+        });
+
+    }
+
+
+    function displayConfirmation(message) {
+        // Display the confirmation message to the user (e.g., using a toast or a modal)
+        // Example: Showing an alert box
+
+        // alert(message);
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'successfully added to cart',
+            showConfirmButton: false,
+            timer: 1500
+        })
+
+    }
+
+    function displayErrorMessage(message) {
+        // Display an error message to the user (e.g., using a toast or a modal)
+        // Example: Showing an alert box
+
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'failed adding to cart',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+
+
+
+</script>

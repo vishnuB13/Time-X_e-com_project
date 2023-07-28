@@ -1,0 +1,98 @@
+
+
+<main class="main-wrap">
+<section class="content-main">
+    <div style="display: flex;justify-content: center;text-align: center;" class="content-header">
+        <%if(orders.length == 0){%>
+            <div>
+                <h2 class="content-header">No Orders Found</h2>
+               
+            </div>
+            <%}else{%>
+        <div>
+            <h2 class="content-title card-title">Order List </h2>
+           
+        </div>
+        
+        <!-- <div>
+            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+        </div> -->
+    </div>
+    <div class="card mb-4">
+        
+        <div class="card-body">
+
+            <div class="table-responsive">
+              <table class="table table-hover" id="myTable">
+                <thead class="text-start">
+                  <tr>
+                    <th>index</th>
+                    <th>#ID</th>
+                    <th>Name</th>
+                    <th>total</th>
+                    <th>Payment Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody style="background-color: whitesmoke;">
+                  <% orders.forEach((item, index) => { %>
+                
+                  <tr>
+                   
+                    <td><%= index + 1 %></td>
+                   
+                    <!-- Rest of the table rows for each product in the order -->
+                    <td><%= item._id %></td>
+                    <td><%= item.userId.name %></td>
+                   
+                    <td>₹<%= item.totalAmount %></td>
+                   
+                    <td>
+
+                      <%=item.deliveryStatus%>
+                    </td>
+                    <td><%= new Date(item.createdAt).toLocaleString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true
+                    }) %></td>
+                    <td class="text-center">
+                      <a href="/admin/order-details/<%= item._id %>" class="btn btn-md rounded font-sm">Details</a>
+                    </td>
+                  </tr>
+                  
+                  <% }) %>
+                </tbody>
+              </table>    
+                
+            </div> <!-- table-responsive //end -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+  
+    <%}%>
+</section>
+</main>
+
+<script>
+ var $j = jQuery.noConflict();
+ $j(document).ready(function() {
+    $j('#myTable').DataTable({
+      searching: true, // Enable search bar
+        columns: [
+        { searchable: false },
+          null, // #ID column is searchable
+          null, // Name column is searchable
+          null, // Email column is searchable
+          null, // Phone column is searchable
+          null, // Total column is searchable
+          null 
+        ]
+    }); // Corrected method name to DataTable()
+   
+  });
+
+  </script>

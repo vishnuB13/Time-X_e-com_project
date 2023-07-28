@@ -1,0 +1,176 @@
+<style>
+    .form-box {
+    margin-top: 100px;
+    max-width: 575px;
+    background-color: #fff;
+    padding: 2.2rem 2rem 4.4rem;
+    box-shadow: 0 3px 16px rgba(51,51,51,0.1)
+}
+
+#buttonlogin {
+        display: flexbox;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #buttonlogin button {
+        margin: 0 30px;
+    }
+</style>
+
+
+
+        <div class="form-box">
+            <div class="form-tab">
+                <div style="display: flex;justify-content: center;"><ul><h3 style="color: goldenrod;"><strong>TIME-X</strong></h3></ul></div>
+                <ul class="nav nav-pills nav-fill" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">LOG IN</a>
+                    </li>
+                   
+                </ul>
+                <div class="tab-content" id="tab-content-5">
+                    <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                        <% if(errMessage != ""){ %>
+                            <div class="alert alert-warning alert-dismissible fade show"  role="alert" id="warningAlert" style="padding: 10px; background-color: lightsalmon;">
+                              <%=  errMessage %>
+                              <button type="button" class="close" onclick="errorClose()" aria-label="Close" fdprocessedid="bi0wev">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                         <% } %>
+                       
+
+                      
+                        <form action="/login" method="post" onsubmit="return validation">
+                            <div class="form-group">
+                                <label for="Email">Username or email address *</label>
+                                <input type="text" class="form-control" id="Email"  name="email" onkeydown="validEmail()" required>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group">
+                                <label for="singin-password">Password *</label>
+                                <input type="password" class="form-control" id="password" onkeydown="validPassword()" name="password" required>
+                            </div><!-- End .form-group -->
+
+
+                            <div class="form-footer" id="buttonlogin">
+
+                               
+                                <a href="/register"><span>REGISTER</span></a>
+                                <i class="icon-long-arrow-right"></i>
+                               
+                                <button type="submit" onclick="" class="btn btn-outline-primary-2">
+                                    <span>LOG IN</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </div><!-- End .form-footer -->
+                            <div style="display: flex;justify-content: center;margin-right: 5px;"> <a onclick="showModal()">Forgot Password <span style="color: goldenrod;"><strong>click here</strong></span></a>
+                            </div>
+                        </form>
+                        
+                    </div><!-- .End .tab-pane -->
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="number-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    </div>
+                    <div class="modal-body">
+                        <form action="/forgot-Password" method="post" >
+                            <span id="error" class="text-danger"></span>
+                            
+                            <div class="row">
+                              <div class="mb-3 col-md-6">
+                                <label class="form-label" for="inputPhone">Phone*</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  name="mobile"
+                                  placeholder="Enter your registered number"
+                                  id="phoneNumber"
+                                  required
+                                />
+                              </div>
+                            </div>
+                          
+                            <div class="modal-footer">
+                                <button style="cursor: pointer;"  class="btn btn-secondary" onclick="closeAlert()" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" style="cursor: pointer;" class="btn btn-primary bg-info border-0" ><i class="bi bi-save"></i>  Send OTP </button>
+                                </div>
+                            
+                          </form>
+                    </div>
+                    </div>                            
+                  </div>
+                  </div><!-- End .page-content -->
+
+
+        </div>
+        
+                   
+<script>
+let errorEmail = document.getElementById('error-Email')
+let errorPassword = document.getElementById('error-Password')
+console.log(errorEmail)
+
+function showModal(){
+    var modal = $("#number-Modal");
+        modal.modal("show");
+}
+  
+  
+  function errorClose() {
+    $('#warningAlert').alert('close'); 
+  }
+  function closeAlert(){
+  var modal =  $('#number-Modal')
+  modal.modal("hide")
+  }
+
+
+ 
+  function validEmail() {
+        const email = document.getElementById('Email').value
+        console.log(email,"emaillllll")
+        if (email == "") {
+            errorEmail.innerHTML = "Enter your email address"
+            return false
+        }
+        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
+            errorEmail.innerHTML = 'Enter a proper email address'
+            return false
+        }
+        errorEmail.innerHTML = null
+        return true
+    }
+
+    function validPassword() {
+        const psd = document.getElementById('password').value
+        if (psd == "") {
+            errorPassword.innerHTML = "Enter a password"
+            return false
+        }
+        if (psd.length < 5) {
+			
+            errorPassword.innerHTML = "Enter valid password";
+            return false
+        }
+        errorPassword.innerHTML = null
+        return true
+    
+    }
+
+       
+    function validation() {
+        if (!validEmail() || !validPassword() ) {
+            return false
+        }
+        return true
+    }
+
+</script>

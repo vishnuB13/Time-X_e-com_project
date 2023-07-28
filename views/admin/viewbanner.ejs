@@ -1,0 +1,228 @@
+
+<main class="main-wrap">
+    <section class="content-main">
+        <div style="display: flex;justify-content: center;text-align: center;" class="content-header">
+            <%if(bannerdata.length == 0){%>
+                <div>
+                    <h2 class="content-header">No Orders Found</h2>
+                   
+                </div>
+                <%}else{%>
+            <div>
+                <h2 class="content-title card-title">Banner List </h2>
+               
+            </div>
+            
+            <!-- <div>
+                <input type="text" placeholder="Search order ID" class="form-control bg-white">
+            </div> -->
+        </div>
+        <div class="card mb-4">
+            
+            <div class="card-body">
+    
+                <div class="table-responsive">
+                  <table class="table table-hover" id="myTable">
+                    <thead class="text-start">
+                      <tr>
+                        <th>index</th>
+                        <th>BannerId</th>
+                        <th>Title</th>
+                        <th>Expires</th>
+                        <th>options</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody style="background-color: whitesmoke;">
+                      <% bannerdata.forEach((item, index) => { %>
+                    
+                      <tr>
+                       
+                        <td><%= index + 1 %></td>
+                       
+                        <!-- Rest of the table rows for each product in the order -->
+                        <td><%= item._id %></td>
+                        <td><%= item.title %></td> 
+                        <td>₹<%= item.endDate %></td> 
+                        <td><button onclick="editBanner('<%=item._id%>')" class="btn btn-primary" >edit</button></td> 
+                        <td><button onclick="deleteBanner('<%=item._id%>')" class="btn btn-danger">delete</button></td>
+
+                      </tr>
+                      
+                      <% }) %>
+                    </tbody>
+                  </table>    
+                    
+                </div> <!-- table-responsive //end -->
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+      
+        <%}%>
+
+        <div class="modal fade" id="editBannerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Banner </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               
+              </div>
+              <div class="modal-body">
+                <form id="banner-edit-form" > 
+                  <span id="editError" class="text-danger"></span>
+                  
+                  <div class="form-group">
+                    <label for="link">Banner Link:</label>
+                    <input type="text" id="link" name="link" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="altText">Alt Text:</label>
+                    <input type="text" id="altText" name="altText" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" required class="form-control"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" required class="form-control">
+                  </div>
+                  <input type="text" id="bannerId" name="couponId" class="form-control" hidden>
+               
+              
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary bg-info border-0" id="saveCouponBtn" ><i class="bi bi-save"></i> Save Changes</button>
+                </div>
+              </form>
+              </div>
+              </div>                            
+            </div>
+          </div>
+
+
+
+    </section>
+    </main>
+    <script>
+function deleteBanner(id){
+    $.ajax({
+        url:'/admin/delete-banner',
+        type:'delete',
+        data:{id:id},
+        success:function(response){
+        if(response.status){
+            Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: 'successfully deleted',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+        }else{
+           Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'deleting failed',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+        }
+        },
+        error:function(error){
+        Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'server error',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+        }
+    })
+}
+
+
+function editBanner(id){
+  console.log(id,"id")
+var modal = $('#editBannerModal')
+$.ajax({
+  url:'/admin/banner-modal',
+  type:'get',
+  data:{id:id},
+  success:function(response){
+  console.log(response,"response")
+  $('#link').val(response.link)
+  $('#altText').val(response.altText)
+  $('#title').val(response.title)
+  $('#description').val(response.description)
+  var dateValue = response.endDate;
+           var date = new Date(dateValue);
+           var year = date.getFullYear();
+           var month = ('0' + (date.getMonth() + 1)).slice(-2);
+           var day = ('0' + date.getDate()).slice(-2);
+          
+           var formattedDate = year  + '-' + month + '-' +  day;
+  $('#endDate').val(formattedDate)
+  var dateStartValue = response.startDate;
+           var date = new Date(dateStartValue);
+           var year = date.getFullYear();
+           var month = ('0' + (date.getMonth() + 1)).slice(-2);
+           var day = ('0' + date.getDate()).slice(-2);
+          
+           var formattedStartDate = year  + '-' + month + '-' +  day;
+  $('#startDate').val(formattedStartDate) 
+  $('#bannerId').val(response._id)
+  modal.modal('show')
+  },
+  error:function(error){
+    Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'server error',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+  }
+})
+
+}
+
+$('#saveCouponBtn').click((event)=>{
+  event.preventDefault()
+  let form = $('#banner-edit-form')
+  $.ajax({
+    url:'/admin/edit-modal-banner',
+    type:'put',
+    data:form.serialize(),
+    success:function(response){
+    if(response.status){
+      Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: 'successfully edited',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+    }
+    },
+    error:function(err){
+      Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'editing failed',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }).then(()=>{location.reload()})
+    }
+  })
+})
+
+    </script>

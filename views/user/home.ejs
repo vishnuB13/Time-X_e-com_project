@@ -1,0 +1,319 @@
+
+<style>
+#eachProduct{
+    max-width: 100px;
+}
+.quantity{
+    color: blue;
+}
+
+
+  
+
+ 
+
+  .cards-container {
+    display: block;
+    justify-content: space-between; /* Adjust as needed */
+  }
+
+  .card {
+    width: auto; /* Set the desired width for each card */
+    height: auto; /* Set the desired height for each card */
+    overflow: hidden; /* Ensure the image stays within the card boundaries */
+    margin: 0px 160px;
+    padding: 10px ;
+    position: relative;
+  }
+ 
+  .card img {
+    object-fit: cover; /* Ensure the image covers the entire container without distortion */
+  }
+  #title{
+    position:absolute;
+    width: 50%;
+    height: 50%;
+    left: 170px;
+    top: 50%;
+    color: goldenrod;
+  }
+  #altText{
+    color: white;
+    position:absolute;
+    width: 50%;
+    height: 50%;
+    left: 170px;
+    top: 60%;
+  }
+  #visit{
+    position:absolute;
+    background-color: goldenrod;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    left: 170px;
+    top: 70%;
+
+  }
+  
+
+</style>
+        <main class="main">
+            <div class="cards-container">
+                <%if(banner.length){%>
+                <% banner.forEach(item => { %>
+                    <a href="<%=item.link%>">
+                  <div  class="card">
+                     <img src="uploads/<%= item.imageUrl%>" alt="Card Image"> 
+                     <strong> <h4 id="title"><%=item.title%></h4> 
+                     </strong>
+                     <h6 id="altText"><strong><%=item.altText%></strong></h6>
+                     <button id="visit">VISIT NOW</button>
+                  </div> 
+                </a>            
+                <% }) %>
+                <%}%>
+            </div>
+
+                <div style="margin-bottom: 130px;" class="container">
+                    <div class="owl-carousel owl-simple" data-toggle="owl" 
+                        data-owl-options='{
+                            "nav": false, 
+                            "dots": false,
+                            "margin": 30,
+                            "loop": false,
+                            "responsive": {
+                                "0": {
+                                    "items":2
+                                },
+                                "420": {
+                                    "items":3
+                                },
+                                "600": {
+                                    "items":4
+                                },
+                                "900": {
+                                    "items":5
+                                },
+                                "1024": {
+                                    "items":6
+                                }
+                            }
+                        }'>
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/1.png" alt="Brand Name">
+                        </a>
+
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/2.png" alt="Brand Name">
+                        </a>
+
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/3.png" alt="Brand Name">
+                        </a>
+
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/4.png" alt="Brand Name">
+                        </a>
+
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/5.png" alt="Brand Name">
+                        </a>
+
+                        <a href="#" class="brand">
+                            <img src="assets/images/brands/6.png" alt="Brand Name">
+                        </a>
+                    </div><!-- End .owl-carousel -->
+                </div><!-- End .container -->
+
+
+
+            <div class="container">
+                <div class="heading heading-center mb-3">
+                    <h2 style="color: goldenrod;" class="title-lg">All Products</h2><!-- End .title -->
+
+                    <ul class="nav nav-pills justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="trendy-all-link" data-toggle="tab" href="#trendy-all-tab" role="tab" aria-controls="trendy-all-tab" aria-selected="true">All</a>
+                        </li>
+                    </ul>
+                </div><!-- End .heading -->
+
+                
+              
+                <div class="tab-content tab-content-carousel">
+                    <div class="tab-pane p-0 fade show active" id="trendy-all-tab" role="tabpanel" aria-labelledby="trendy-all-link">
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":4,
+                                        "nav": true,
+                                        "dots": false
+                                    }
+                                }
+                            }'>
+                           
+
+                           
+                            <%productData.forEach((product)=>{%>
+                                <%if(!product.deleted){%>
+                           
+                            <div class="product product-11 text-center">
+                                <figure class="product-media">
+                                    <span class="product-label label-sale">30% OFF</span>
+                                    <a href="/product/<%=product._id%>">
+                                        <img src="uploads/<%=product.images[0]%>" alt="Product image" class="product-image">
+                                        <img src="uploads/<%=product.images[0]%>" alt="Product image" class="product-image-hover">
+                                    </a>
+
+                                    <div class="product-action-vertical">
+                                        <a onclick="wishList('<%=product._id%>')" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                    </div><!-- End .product-action-vertical -->
+
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <h3 class="product-title"><%=product.productName%></h3><!-- End .product-title -->
+                                    <div class="product-price">
+                                        <span style="text-decoration: line-through;" class="old-price">Rs.<%=product.price%></span>
+                                        <span class="new-price">for RS.<%=product.offPrice%></span><br>
+                                        <span class="new-price quantity" >only <%=product.quantity%> pieces left</span>
+                                    </div><!-- End .product-price -->
+
+                                </div><!-- End .product-body -->
+                                <div class="product-action">
+                                    <a onclick="addCart('<%=product._id%>')" class="btn-product btn-cart"><span>add to cart</span></a>
+                                </div><!-- End .product-action -->
+                            </div><!-- End .product -->
+                            <%}%>
+                            <%})%>
+
+                           
+                           
+                        </div><!-- End .owl-carousel -->
+                        <div class="load-more-container text-center">
+                            <a href="/allProducts" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+                        </div><!-- End .load-more-container -->
+                    </div><!-- .End .tab-pane -->   
+                 </div><!-- End .tab-content -->
+            </div><!-- End .container -->
+          
+</main><!-- End .main -->
+
+
+
+ 
+
+
+<script>
+
+
+    function addCart(productId){
+        $.ajax({
+            url:`/cart/${productId}`,
+            method:'put',
+            data:{productId:productId},
+            success:function(response){
+                console.log(response)
+            if(response.status){
+                console.log('in status true')
+                Swal.fire({
+                position:'center',
+                icon:'success',
+                title:"successfully added to cart",
+                timer:1500
+                })
+            }else{
+                Swal.fire({
+                position:'top-end',
+                icon:'error',
+                title:"please login to add to cart",
+                timer:1500
+                }).then(()=>{location.href='/login'})
+            }
+            },
+            error:function(error){
+                console.log(error)
+                throw(error)
+            }
+        })
+    }
+
+
+function wishList(productId){
+    $.ajax({
+        url:'/wishlist',
+        method:'post',
+        data:{productId : productId},
+        success:function(response){ 
+            console.log(response.status,"stat")
+            if(response.status==="1"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'successfully added  to Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }else if(response.status ==="2"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'product is already in Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }
+            else if(response.status === "4"){
+                Swal.fire({
+  position: 'top-end',
+  icon: 'error',
+  title: 'please login to add to wishlist',
+  showConfirmButton: false,
+  timer: 1500
+}).then(()=>{location.href='/login'})
+            }
+            else{
+                Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'successfully added new product to Wishlist',
+  showConfirmButton: false,
+  timer: 1500
+})
+            }
+            
+        },error:function(error){Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'failed adding to Wishlist.',
+  showConfirmButton: false,
+  timer: 1500
+})}
+    })
+}
+
+</script>
+ 
+
+
+
+
+      

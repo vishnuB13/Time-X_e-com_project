@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    
+
+  
+
+
+    
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                                </li>
+                              
+                            </ul>
+                            
+                            <div class="tab-content" id="tab-content-5">
+                                <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                    <form action="/admin" method="post">
+
+                                        <% if(response.message){ %>
+                                            <div class="alert alert-warning alert-dismissible fade show"  role="alert" id="warningAlert" style="padding: 10px; background-color: lightsalmon;">
+                                              <%=  response.message %>
+                                              <button type="button" class="close" onclick="closeAlert()" aria-label="Close" fdprocessedid="bi0wev">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                         <% } %>
+
+                                        <div class="form-group">
+                                            <label for="singin-email">Username or email address *</label>
+                                            <input type="text" class="form-control" value="<%=response.email%>" id="adminemail" name="email" required>
+                                        </div><!-- End .form-group -->
+    
+                                        <div class="form-group">
+                                            <label for="singin-password">Password *</label>
+                                            <input type="password" class="form-control" id="adminpassword" name="password" required>
+                                        </div><!-- End .form-group -->
+    
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                <span>LOG IN</span>
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+    
+                                        </div> 
+                                    </form>
+                                      
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                             
+                            </div>
+                        </div>
+                     </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function closeAlert() {
+    $('#warningAlert').alert('close');
+  }
+</script>
