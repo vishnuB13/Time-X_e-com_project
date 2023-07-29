@@ -48,7 +48,7 @@ router.post('/forgot-Password',userController.forgotPassword)
 router.get('/reset-Password',userController.resetPassword)
 router.post('/reset-Password',userController.postNewPassword)
 router.get('/new-Password',userController.newPasswordPage) 
-router.post('/new-Password',userController.setNewPassword)   
+router.post('/new-Password',userController.setNewPassword)    
 
 
 router.patch('/add-address',addressController.addAddress);
