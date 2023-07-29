@@ -282,11 +282,14 @@ const removeWishList = async(req,res)=>{
 const getCheckout =async (req,res)=>{
    try {
     let userId = req.session.userId
+    
     cartHelper.getCartProducts(userId).then(async(cartItems)=>{
         let cartTotal = await  cartHelper.getCartTotal(userId)      
         let addressData=await Address.findOne({user:userId})
         let coupon = await Coupon.find({"statusEnable":true}) 
     res.render('user/checkout',{header:true,userdata:true,cartTotal,cartItems,addressData,coupon})
+        await Cart.findOneAndUpdate({userId:userId},{$set:{discount:0 }}) 
+        await Cart.findOneAndUpdate({userId:userId},{discountApplied:false})
 })
    } catch (error) {
     console.log(error) 
@@ -377,17 +380,23 @@ const verifyCoupon =async(req,res)=>{
     if(couponExist){
         let discount = couponExist.discount
     let cartTotal = await cartHelper.getCartTotal(userId,discount)
-    console.log(cartTotal)
     let carttotal = cartTotal[0].total
-    
-    console.log(couponExist.minPurchase) 
+
     if(carttotal<couponExist.minPurchase){
         res.json({status:false,message:"purchase amount is less"})
     }
-    else {
-       discount = carttotal*discount/100
-       await Cart.updateOne({userId:userId},{$set:{discount:discount}})
-       res.json({status:true,message:"discount successfully added"})
+   
+    else  {
+        const cart = await Cart.findOne({ userId: userId });
+        if (cart.discountApplied) {
+           return res.json({ status: false, message: "Discount already applied." });
+          
+        }else{
+            discount = carttotal*discount/100
+            await Cart.updateOne({userId:userId},{$set:{discount:discount,discountApplied:true}})
+            res.json({status:true,message:"discount successfully added"})
+        }
+      
     }
     
     }

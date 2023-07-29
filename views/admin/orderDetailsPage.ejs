@@ -36,7 +36,9 @@
                             <div class="text">
                                 <h6 class="mb-1">Customer</h6>
                                 <p class="mb-1">
-                                    
+                                    <%=deliveryDetails.firstname%><%=deliveryDetails.lastname%><br>
+                                    <%=deliveryDetails.mobile%><br>
+                                    <%=deliveryDetails.email%><br> 
                                 </p>
                                 <!-- <a href="#">View profile</a> -->
                             </div>
@@ -50,7 +52,7 @@
                             <div class="text">
                                 <h6 class="mb-1">Order info</h6>
                                 <p class="mb-1">
-                                    Shipping: Fargo express <br> Pay method:<%=order.paymentMethod%> <br >Payment Status: <%=order.paymentStatus%>
+                                    Shipping: Fargo express <br> Pay method:<%=order.paymentMethod%>
                                 </p>
                                 <!-- <p class="mb-1"> Order Status:<%=order.deliveryStatus%></p> -->
                             </div>
@@ -64,21 +66,20 @@
                             <div class="text">
                                 <h6 class="mb-1">Deliver to</h6>
                                 <p class="mb-1">
-                                    <%= new Date(order.createdAt).toLocaleString('en-US', {
+                                   
+                                    
+                                    <%=deliveryDetails.streetaddress%><br>
+                                    <%=deliveryDetails.appartment%><br>
+                                    <%=deliveryDetails.town%>,<%=deliveryDetails.state%><br>
+                                    <%=deliveryDetails.zip%><br>
+                                    ordered on :  <%= new Date(order.createdAt).toLocaleString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
                                         year: 'numeric',
                                         hour: 'numeric',
                                         minute: 'numeric',
                                         hour12: true
-                                    }) %>
-                                    <%=deliveryDetails.firstname%><%=deliveryDetails.lastname%><br>
-                                    <%=deliveryDetails.mobile%><br>
-                                    <%=deliveryDetails.email%><br>
-                                    <%=deliveryDetails.streetaddress%><br>
-                                    <%=deliveryDetails.appartment%><br>
-                                    <%=deliveryDetails.town%>,<%=deliveryDetails.state%><br>
-                                    <%=deliveryDetails.zip%><br>                                
+                                    }) %>                                
                                 </p>
                                 <!-- <a href="#">View profile</a> -->
                             </div>
@@ -91,12 +92,14 @@
                             <table class="table">
                                 <thead class="text-center">
                                     <tr>
+                                        
                                         <th width="">Product</th>
                                         <th width="">Unit Price</th>
                                         <th width="">Quantity</th>
                                         <th width="">Total</th>
                                         <th width="">Payment Status</th>
-                                        <th width="">Order Status</th>
+                                        <th width="">Delivery Status</th>
+                                        <th width="">Order Id</th>
                                         <th width="">Options</th>
                                     </tr>
                                 </thead>
@@ -105,9 +108,7 @@
                                     <tr>
                                         <td>
                                             <a class="itemside" href="#">
-                                                <div class="left">
-                                                    <p>images</p>
-                                                </div>
+                                                <%=index+1%>.
                                                 <div class="info"><%=item.productname%> </div>
                                             </a>
                                         </td>
@@ -116,6 +117,7 @@
                                         <td>₹<%=(item.productnetprice*item.quantity)%></td> 
                                         <td ><%=item.paymentStatus%></td>
                                         <td ><%=item.deliveryStatus%></td>
+                                        <td><%=item._id%></td>
                                         <td>
                                           
                                                 <select style="border:none" id="status<%= index %>">
@@ -141,16 +143,7 @@
                                                     <dt>Grand total:</dt>
                                                     <dd><b class="h5">₹<%=order.totalAmount%></b></dd>
                                                 </dl>
-                                                <dl class="dlist">
-                                                    <dt class="text-muted">Payment Status:</dt>
-                                                    <dd>
-                                                        <%if(order.paymentStatus == "pending"){%>
-                                                            <span class="badge rounded-pill alert-warning text-warning"><%=order.paymentStatus%></span>
-                                                        <%}else{%>
-                                                            <span class="badge rounded-pill alert-success text-success"><%=order.paymentStatus%></span>
-                                                        <%}%>
-                                                    </dd>
-                                                </dl>
+                                             
                                             </article>
                                         </td>
                                     </tr>

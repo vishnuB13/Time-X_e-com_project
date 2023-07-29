@@ -40,15 +40,15 @@ router.post('/verify-coupon',userController.verifyCoupon)
     
    
 
-router.get('/userprofile',middleware.userAuth, userController.getUserProfile)
+router.get('/userprofile',middleware.userAuth, userController.getUserProfile) 
 router.get('/editprofile',userController.editprofile)  
 router.put('/editprofile',userController.editprofile) 
 router.post('/changePassword',userController.changePassword) 
 router.post('/forgot-Password',userController.forgotPassword) 
 router.get('/reset-Password',userController.resetPassword)
 router.post('/reset-Password',userController.postNewPassword)
-router.get('/new-Password',userController.newPasswordPage)
-router.post('/new-Password',userController.setNewPassword)
+router.get('/new-Password',userController.newPasswordPage) 
+router.post('/new-Password',userController.setNewPassword)   
 
 
 router.patch('/add-address',addressController.addAddress);
@@ -59,7 +59,7 @@ router.delete('/delete-address',addressController.deleteAddress)
      
 router.get('/cart',middleware.userAuth, cartController.getCart) 
  
-router.put('/cart/:id', cartController.getProductId)
+router.put('/cart/:id', cartController.getProductId) 
 router.patch('/cart/changequantity',cartController.changeQuantity) 
 router.delete('/remove-item',middleware.userAuth,cartController.removeCartItem);
  

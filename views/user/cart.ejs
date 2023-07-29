@@ -9,8 +9,8 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/allproducts">Shop</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
                 </ol>
             </div><!-- End .container -->
@@ -31,11 +31,11 @@
                                     <table class="table table-cart table-mobile">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Image</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Price</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Remove</th>
+                                                <th >Image</th>
+                                                <th >Name</th>
+                                                <th >Quantity</th>
+                                                <th >Price</th>
+                                                <th >Remove</th>
                                             </tr>
                                         </thead>
 
@@ -59,15 +59,15 @@
 
                                             <td class="quantity-col">
                                                 <div class="cart-product-quantity">
-                                                  <div style="display: flex;justify-content: space-between;">
-                                                    <button style="border: none;" onclick="changeQuantity('<%=element.item%>','<%=element._id%>',-1,'<%=element.quantity%>')" id="quantity-decrease-button">-</button>
+                                                  <div style="display: flex;justify-content: space-evenly">
+                                                    <button style="border: none; background-color:whitesmoke;color:black;border-radius: 50%;" onclick="changeQuantity('<%=element.item%>','<%=element._id%>',-1,'<%=element.quantity%>')" id="quantity-decrease-button">-</button>
                                                     <h6 id="<%=element.productId%>" style="margin-top: 5px;"><%=element.quantity%> </h6>
-                                                    <button  style="border: none;" onclick="changeQuantity('<%=element.item%>','<%=element._id%>',1,'<%=element.quantity%>')" id="quantity-increase-button">+</button>
+                                                    <button   style="border: none; background-color:whitesmoke;color:black;border-radius: 50%;" onclick="changeQuantity('<%=element.item%>','<%=element._id%>',1,'<%=element.quantity%>')" id="quantity-increase-button">+</button>
                                                 </div>
                                                 </div><!-- End .cart-product-quantity -->
                                             </td>
                                             <td class="total-col"><h6><%=element.currentPrice%></h6></td>
-                                            <td class="remove-col"><button onclick="removeFromCart('<%=element.unique_id%>','<%=element._id%>')" class="btn-remove" id="remove-button"><i class="icon-close"></i></button></td>
+                                            <td class="remove-col"><button  style="border-width: 1px;background-color:whitesmoke;color:black;border-radius: 50%;border-color: gold;" onclick="removeFromCart('<%=element.unique_id%>','<%=element._id%>')"  id="remove-button"><i  class="icon-close"></i></button></td>
                                         
                                         </tr>
                                        

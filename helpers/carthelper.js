@@ -105,11 +105,7 @@ getCartTotal:async (userId)=>{
               }  
             }
       ]);
-      console.log(grandTotal,"grandtotal")
-
-   
       return grandTotal
-
     }catch(e){
         console.log(e,"error in getting total of cart");
     }

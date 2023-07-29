@@ -54,11 +54,12 @@
                                 
                                 <th style="color: goldenrod" scope="col"><strong>Name</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Price</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>Quantity</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>Subtotal</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>Payment Method</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>Payment Status</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>DeliveryAddress</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Count</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Total</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Payment</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Status</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Address</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>ordered on</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Options</strong></th>
                             </tr>
                         </thead>
@@ -79,7 +80,7 @@
                                             <td class="text-center" data-title="Quantity"><%= item.quantity%></td>
                                             
                                             <td class="text-center" data-title="Subtotal">
-                                                <span>₹<%= item.productnetprice*item.quantity%></span>
+                                                <span>₹<%= item.totalAmount%></span>
                                             </td>
                                             <td class="text-center" data-title="paymentmethod"><%=order.paymentMethod%></td>
                                             <td class="text-center" data-title="status"><%=item.deliveryStatus%></td>
@@ -92,6 +93,14 @@
                                                 <p><%= order.deliveryDetails.appartment %></p> 
                                                 <p><%= order.deliveryDetails.state %>,<%= order.deliveryDetails.town %></p>
                                                 <p> <%= order.deliveryDetails.zip %></p> </td>
+                                                <td><%= new Date(order.createdAt).toLocaleString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: 'numeric',
+                                                    hour12: true
+                                                }) %></td>
                                             <%if(item.deliveryStatus !== "Delivered"){%>
                                             <td class="action-col">
                                                 <%if(item.deliveryStatus === "Cancelled" || item.deliveryStatus === "Returned" ||item.deliveryStatus === "Return requested"){%>
@@ -106,8 +115,6 @@
                                                          
                                                         </button>
                                                         <%}%>
-                                                
-                                               
                                                 </td>
                                             <%}else{%>  
                                                 <td class="action-col">

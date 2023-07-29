@@ -106,22 +106,21 @@ const adminLogin = async(req,res)=>{
         response.status = false
         response.email=email
         response.message = "invalid password"
-        res.redirect('/admin') 
+        res.redirect('/admin')
         }
+      
     else{
         response.status = true
         response.admin = admins
         req.session.admin=response
         req.session.adminLoggedIn = true
-        res.redirect('/admin/adminhome')} 
-        // console.log(req.session)   
+        res.redirect('/admin/adminhome')}  
     }
     else{
         response.status = false
         response.message = "invalid email"
         response.email = email
         res.redirect('/admin')
-        
         }
 }
 catch(e){
@@ -244,7 +243,8 @@ const putEditProduct = async(req,res)=>{
                 catch(error)
                 {
                    console.log(error) 
-                }})       
+                }
+    })       
 }
 
 
@@ -305,10 +305,8 @@ const postCategory =async(req,res)=>{
   
 const deleteCategory = async (req,res)=>{
     let categoryId = req.body.categoryId
-        categoryId = new mongoose.Types.ObjectId(categoryId)
-        
-    try {
-        
+        categoryId = new mongoose.Types.ObjectId(categoryId)    
+    try {    
     await Category.findByIdAndUpdate({_id:categoryId},{$set:{deleted:true}})
     res.json({status:true}) 
     } catch (error) {
@@ -329,8 +327,8 @@ res.json({status:true})
 }
 
 const orderManagement = async(req,res)=>{
-   let orders= await Order.find().populate('userId','name email mobile')
-   
+   let orders= await Order.find().populate('userId','name email mobile').sort({createdAt:-1})
+   console.log(orders)
     res.render('admin/ordermanagement',{orders,admins:true})
 }
 

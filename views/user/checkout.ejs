@@ -77,7 +77,12 @@ button#close-Modal:hover {
                                         <tbody>
                                             <% coupon.forEach(element => { %>
                                                 <tr>
-                                                    <td><%= element.couponCode %></td>
+                                                    <td>
+                                                        <!-- Add a button to represent the clickable coupon -->
+                                                        <button style="border: none;background-color: white;" class="couponButton" data-coupon="<%= element.couponCode %>">
+                                                            <%= element.couponCode %>
+                                                        </button>
+                                                    </td>                                                    
                                                     <td><%= element.discount %>%</td>
                                                     <td><%= element.minPurchase %></td>
                                                        
@@ -552,8 +557,8 @@ function  razorpayPayment(order){
                 type:'POST',
                 success:(response =>{
                     
-                    if(response.status){
-                        document.getElementById('checkout-box').style.display="none"
+                    if(response.status){  
+                       
                         Swal.fire({
   position: 'top-end',
   icon: 'success',
@@ -633,6 +638,18 @@ function deleteAddress(addressId){
         }
     })
 }
+
+const couponCodeInput = document.getElementById('checkout-discount-input');
+    const couponButtons = document.querySelectorAll('.couponButton');
+
+    // Add a click event listener to each coupon button
+    couponButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            couponCodeInput.value = button.dataset.coupon
+            var modale = $('#couponModal')
+            modale.modal("hide")
+        })
+    });
 
 
 </script>
