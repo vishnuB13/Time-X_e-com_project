@@ -13,9 +13,7 @@
                
             </div>
             
-            <!-- <div>
-                <input type="text" placeholder="Search order ID" class="form-control bg-white">
-            </div> -->
+           
         </div>
         <div class="card mb-4">
             
@@ -113,6 +111,7 @@
     </section>
     </main>
     <script>
+// ajax function to delete banner      
 function deleteBanner(id){
     $.ajax({
         url:'/admin/delete-banner',
@@ -149,16 +148,14 @@ function deleteBanner(id){
     })
 }
 
-
+// ajax function to show edit banner modal
 function editBanner(id){
-  console.log(id,"id")
 var modal = $('#editBannerModal')
 $.ajax({
   url:'/admin/banner-modal',
   type:'get',
   data:{id:id},
   success:function(response){
-  console.log(response,"response")
   $('#link').val(response.link)
   $('#altText').val(response.altText)
   $('#title').val(response.title)
@@ -176,7 +173,6 @@ $.ajax({
            var year = date.getFullYear();
            var month = ('0' + (date.getMonth() + 1)).slice(-2);
            var day = ('0' + date.getDate()).slice(-2);
-          
            var formattedStartDate = year  + '-' + month + '-' +  day;
   $('#startDate').val(formattedStartDate) 
   $('#bannerId').val(response._id)
@@ -190,10 +186,9 @@ $.ajax({
                                     showConfirmButton: false,
                                     timer: 1500
                                     }).then(()=>{location.reload()})
-  }
-})
+}})}
 
-}
+// ajax function to edit banner details
 
 $('#saveCouponBtn').click((event)=>{
   event.preventDefault()
@@ -221,8 +216,6 @@ $('#saveCouponBtn').click((event)=>{
                                     showConfirmButton: false,
                                     timer: 1500
                                     }).then(()=>{location.reload()})
-    }
-  })
-})
+    }})})
 
     </script>

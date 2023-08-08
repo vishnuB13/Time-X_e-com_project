@@ -71,7 +71,8 @@ button#close-Modal:hover {
                                                 <th style="color: goldenrod"><strong>Coupon Code</strong></th>
                                                 <th style="color: goldenrod"><strong>Discount</strong></th>
                                                 <th style="color: goldenrod"><strong>Min Purchase</strong></th>
-                                               
+                                                <th style="color: goldenrod"><strong>Max Purchase</strong></th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,6 +86,7 @@ button#close-Modal:hover {
                                                     </td>                                                    
                                                     <td><%= element.discount %>%</td>
                                                     <td><%= element.minPurchase %></td>
+                                                    <td><%=element.maxPurchase%></td>
                                                        
                                                 </tr>
                                             <% }) %>
@@ -158,14 +160,17 @@ button#close-Modal:hover {
                                     <tr class="summary-total">
                                         <td>Total:</td>
                                         <td>₹<%=  cartTotal[0].total %></td>
+                                        <input type="hidden" name="Totals" value="<%=cartTotal[0].total%>">
                                     </tr><!-- End .summary-total -->
                                     <tr class="summary-total">
                                         <td>discount:</td>
                                         <td>₹<%=  cartTotal[0].discount%></td>
+                                        <input type="hidden" name="discount" value="<%=cartTotal[0].discount%>">
                                     </tr>
                                     <tr class="summary-total">
                                         <td>Grand Total:</td>
                                         <td>₹<%= cartTotal[0].total- cartTotal[0].discount%></td>
+                                        <input name="discountAmount" type="hidden" value="<%=cartTotal[0].total- cartTotal[0].discount%>">
                                     </tr>
                                     <% } %>
                                 </tbody>
@@ -192,6 +197,17 @@ button#close-Modal:hover {
                                         <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Razorpay</label>
                                         <div class="form-group collapse in" id="paypal">
                                             <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="payment_option" id="exampleRadios3" value="wallet">
+                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Wallet Payment(<%=wallet.walletAmount%>)</label>
+                                        <p class="text-danger" id="walletError"></p>
+                                        <div class="form-group collapse in" id="bankTranfer">
+                                            <p class="text-muted mt-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -451,18 +467,18 @@ function uncheckOtherCheckboxes(checkboxes, currentIndex) {
                 console.log("in checkout.....");
                 location.href = '/successPage';
             }
+            else if(response.wallet){location.href='/successPage'}
+            else if(response.wallet===false){
+                let walletError = document.getElementById('walletError')
+                walletError.textContent=response.message
+                }
             else{
             razorpayPayment(response)
-
             }
         },
         error: function(error) {
             console.log(error);
-        }
-    });
-    }
-   
-});
+        }})}})
 
 
 function  razorpayPayment(order){
@@ -476,9 +492,6 @@ function  razorpayPayment(order){
                 "image": "apple-mobile-web-app-title",
                 "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                 "handler": function (response) {
-                //  alert(response.razorpay_payment_id);
-                //  alert(response.razorpay_order_id);
-                //  alert(response.razorpay_signature)
                 verifyPayment(response, order)
                 },
                 "prefill": {
@@ -506,7 +519,6 @@ function  razorpayPayment(order){
                 });
 
                 rzp1.open();
-
          }
 
          function verifyPayment(payment,order){
@@ -524,11 +536,7 @@ function  razorpayPayment(order){
                     }else{
                         
                         location.reload();
-                    }
-
-                })
-            })
-         }
+                    }})})}
 
       
         
@@ -546,7 +554,6 @@ function  razorpayPayment(order){
     let applycouponbutton = document.getElementById('applyCouponId')
     applycouponbutton.addEventListener('click', function(event){
         let couponCode=document.getElementById('checkout-discount-input').value
-        console.log(couponCode)
         event.preventDefault()
        
             $.ajax({
@@ -556,9 +563,7 @@ function  razorpayPayment(order){
                 },
                 type:'POST',
                 success:(response =>{
-                    
                     if(response.status){  
-                       
                         Swal.fire({
   position: 'top-end',
   icon: 'success',
@@ -566,8 +571,8 @@ function  razorpayPayment(order){
   showConfirmButton: false,
   timer: 1500
 }).then(location.href='/checkout')
-                    }else{
-                        Swal.fire({
+ }else{
+ Swal.fire({
   position: 'top-end',
   icon: 'success',
   title: response.message,
@@ -580,7 +585,7 @@ function showModal(){
         // error.innerHTML = ""
         modal.modal("show");
 }
-
+// ajax function to add adress at checkout
 function addAddress(){
 
     $.ajax({
@@ -596,18 +601,13 @@ function addAddress(){
                     timer: 1500
                  }).then(() => {
                     location.reload();
-              });
-                }
-            })
-        })
-    
-}
+              })}})})}
 
 let deleteButton = document.getElementById('delete-button')
 deleteButton.addEventListener('click',function(event){
     event.preventDefault()
-   
 })
+// ajax function to delete address at checkout
 function deleteAddress(addressId){
     console.log(addressId)
     $.ajax({
@@ -624,6 +624,13 @@ function deleteAddress(addressId){
                  }).then(() => {
                     location.reload();
               });
+        }else{
+            Swal.fire({
+                    icon: 'success',
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                 }) 
         }
         },error:function(error){
             Swal.fire({

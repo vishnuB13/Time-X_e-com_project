@@ -55,6 +55,41 @@
     top: 70%;
 
   }
+  @media (max-width: 768px) {
+    .cards-container {
+        flex-direction: column; /* Stack the cards vertically */
+    }
+
+    .card {
+        width: 100%; /* Take up full width */
+        margin: 10px 0; /* Adjust vertical margin */
+    }
+
+    #title{
+        position:absolute;
+    width: auto;
+    height: auto;
+    left: 50px;
+    top: 40%;
+    color: goldenrod;
+    }
+    #altText{
+        position:absolute;
+    width: auto;
+    height: auto;
+    left: 50px;
+    top: 50%;
+    color: goldenrod;  
+    }
+    #visit {
+        position:absolute; /* Reset position for mobile layout */
+        width:fit-content; /* Make content full width */
+        padding: 0; /* Add some vertical padding */
+        border-radius: 0px;
+        left: 50px;
+        top: 60%;
+    }
+}
   
 
 </style>
@@ -179,8 +214,14 @@
                                 <figure class="product-media">
                                     <span class="product-label label-sale">30% OFF</span>
                                     <a href="/product/<%=product._id%>">
-                                        <img src="uploads/<%=product.images[0]%>" alt="Product image" class="product-image">
-                                        <img src="uploads/<%=product.images[0]%>" alt="Product image" class="product-image-hover">
+                                        <img srcset="/uploads/<%= product.images[0] %> 320w,
+                                        /uploads/<%= product.images[0] %> 640w,
+                                        /uploads/<%= product.images[0] %> 1024w"
+                                sizes="(max-width: 320px) 320px,
+                                       (max-width: 640px) 640px,
+                                       1024px"
+                                src="/uploads/<%= product.images[0] %>"
+                                alt="Product image" class="product-image">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -209,18 +250,13 @@
                            
                         </div><!-- End .owl-carousel -->
                         <div class="load-more-container text-center">
-                            <a href="/allProducts" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+                            <a href="/shop" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
                         </div><!-- End .load-more-container -->
                     </div><!-- .End .tab-pane -->   
                  </div><!-- End .tab-content -->
             </div><!-- End .container -->
           
 </main><!-- End .main -->
-
-
-
- 
-
 
 <script>
 

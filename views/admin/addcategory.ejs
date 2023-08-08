@@ -202,40 +202,6 @@ th, td {
 
 <script>
 
-// function addCategory(){
-//     $.ajax({
-//       url:"/admin/category",
-//       method:"post",
-//       data:{},
-//       success:function(response){
-//         if(response.status){
-//           Swal.fire({
-//             position: 'top-end',
-//             icon: 'success',
-//             title: 'Successfully added category',
-//             showConfirmButton: false,
-//             timer: 1500
-//           }).then(() => {
-//             location.reload();
-//           });
-//         }
-//       },
-//       error:function(){
-//         Swal.fire({
-//             position: 'top-end',
-//             icon: 'success',
-//             title: 'failed adding category',
-//             showConfirmButton: false,
-//             timer: 1500
-//           }).then(() => {
-//             location.reload();
-//           });
-//       }
-//     })
-//   }
-
-
-
   function confirmDeleteCategory(categoryId) {
     console.log("here");
     console.log(categoryId);
@@ -284,11 +250,7 @@ th, td {
             timer: 1500
           }).then(()=>{
             location.reload()
-          })
-        
-        }
-      
-      },
+          })}},
       error:function(){
         Swal.fire({
             position: 'top-end',
@@ -298,22 +260,16 @@ th, td {
             timer: 1500
           }).then(() => {
             location.reload();
-          });
-      }
-    })
-  }
+          })}})}
 
-</script>
-
-
-<!-- Bootstrap JS -->
-
-
-<script>
   function closeAlert() {
     $('#warningAlert').alert('close')
   }
 
-
-
 </script>
+
+
+ 
+
+
+

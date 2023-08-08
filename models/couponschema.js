@@ -13,6 +13,10 @@ const CouponSchema = mongoose.Schema({
         type: Number,
         required: true
       },
+      maxPurchase:{
+        type:Number,
+        required:true
+      },
       expires:{
         type: Date,
         required: true

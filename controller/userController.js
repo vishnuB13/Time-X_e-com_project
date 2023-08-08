@@ -7,7 +7,7 @@ const Wishlist = require('../models/wishlist')
 const Cart = require('../models/cartSchema')
 const Coupon = require('../models/couponschema')
 const Orders = require('../models/orderSchema');
-const Wallet = require('../models/walletSchema')
+const Wallet = require('../models/walletSchema') 
 const Banner = require('../models/bannerSchema')
 
 
@@ -45,12 +45,17 @@ let productId;
 //------------- homepageget--------------
 
 const homePage = async(req,res)=>{ 
-  let  productData=await Product.find() 
-  let cart = await Cart.find()
-  let banner= await addressHelpers.validBanner()
-  let userId = req.session.userId
-  res.render('user/home',{header:true,userdata,productData,cart,userId,banner})  
-  userId=""  
+  try {
+    let  productData=await Product.find() 
+    let cart = await Cart.find()
+    let banner= await addressHelpers.validBanner()
+    let userId = req.session.userId
+    res.render('user/home',{header:true,userdata,productData,cart,userId,banner})  
+    userId="" 
+  } catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+ 
+  } 
 }
 
 // ----------loginmodalget-----------
@@ -61,50 +66,63 @@ const getLoginRegister = (req,res)=>{
             res.redirect('/')
         }
         else{
-            res.render('user/userlogin',{errMessage,userdata})
             errMessage="";
+            res.render('user/userlogin',{errMessage,userdata})
+           
         } 
     } catch (error) {
-        res.status
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
     }
    
 }
 const getRegister = (req,res)=>{
+try {
     res.render('user/register',{errMessage})
-}
+
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+ 
+}}
 
 // --------regiterpost--------
 
 const postRegister = async(req,res)=>{
     try{
         const {name,email,mobile,password}=req.body;
+        console.log(req.body,"reqbody")
         let userExist = await User.findOne({$or:[{email:email},{mobile:mobile}]}) 
         if(!userExist){
             req.session.body = req.body;
             const mob = req.body.mobile;
             req.session.mobile = mob;
             await client.verify.v2.services(verifySid).verifications.create({to: `+91${mob}`, channel: "sms" });
-            res.redirect('/otpfirst')
+            res.json({status:true}) 
         }   
          else{
-            errMessage = "user already exists"
-            res.redirect('/login')
+            errMessage="email or mobile already exists"
+            res.json({status:false,errMessage:errMessage})
+            errMessage=""
         }
     }catch(e){
-        console.log(e);
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
     }   
 }
 
 const getOtp = (req,res)=>{
+try {
     res.render('user/otpfirst')
-}
+
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
+}}
 
 const validateOtp = async(req,res)=>{
     const {otp} = req.body
-  
-    
     const mob = req.session.mobile
     const {name,email,mobile,password}= req.session.body
+    
     try{
         let response = await client.verify.v2.services(verifySid ).verificationChecks.create({ to: `+91${mob}`, code: otp })
         if(response.valid){  
@@ -117,14 +135,13 @@ const validateOtp = async(req,res)=>{
             const newWallet = new Wallet({walletAmount:0,userId:req.session.userId})
             newWallet.save()
           })
-         
           res.redirect('/') 
         }
         else{
             res.redirect('/otpfirst')
         }
     }catch(e){
-        console.log(e);
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
     }
 }
 
@@ -134,33 +151,34 @@ const validateOtp = async(req,res)=>{
 
 const postLogin = async(req,res)=>{
     try{
-        const {email,password}=req.body;  
+        const {email,password}=req.body
+       
         const userExist = await User.findOne({email:email})
+       
         if(userExist&&!userExist.isBlocked){
           bcrypt.compare(password,userExist.password).then((result)=>{
             if(result){
                 req.session.logged=true
                 req.session.userId=userExist._id
                 userdata=req.session.logged
-                res.redirect('/');
+                res.json({status:true})
             } else{
                 errMessage = "invalid password"
-               res.redirect('/login')
+               res.json({status:false,message:"invalid password"})
             }
         })  
       }
       else{
         if(!userExist){ 
-            errMessage="invalid email"
-        res.redirect('/login')
+           
+        res.json({status:false,message:"email is not registered"})
     }
     else{
-        errMessage="This email is blocked"
-        res.redirect('/login')
+        res.json({status:false,message:"This user is blocked"})
     }  
       }
     }catch(e){
-        console.log(e)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
     }
   
 }
@@ -198,24 +216,20 @@ const addCart = async(req,res)=>{
              
       } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
       }
     }
       
-   
-  
-
-
 const getWishlist = async(req,res)=>{
     try {
         let userId = req.session.userId
 let userdata = await User.findOne({userId:userId})
 let wishlistData = await Wishlist.findOne({userId:userId})
-console.log(wishlistData)
 
     res.render('user/wishlist',{header:true,userdata,wishlistData}) 
     } catch (error) {
         console.log(error)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
     }
 }
 
@@ -263,6 +277,8 @@ if(!wishlistData){
 } 
 } catch (error) {
     console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
 }
 }
 
@@ -275,6 +291,8 @@ const removeWishList = async(req,res)=>{
  res.json({status:true})
     } catch (error) {
         console.log(error)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
     }
 }
 
@@ -286,13 +304,16 @@ const getCheckout =async (req,res)=>{
     cartHelper.getCartProducts(userId).then(async(cartItems)=>{
         let cartTotal = await  cartHelper.getCartTotal(userId)      
         let addressData=await Address.findOne({user:userId})
-        let coupon = await Coupon.find({"statusEnable":true}) 
-    res.render('user/checkout',{header:true,userdata:true,cartTotal,cartItems,addressData,coupon})
+        let coupon = await Coupon.find({"statusEnable":true})
+        let wallet = await Wallet.findOne({userId:userId}) 
+    res.render('user/checkout',{header:true,userdata:true,cartTotal,cartItems,addressData,coupon,wallet})
         await Cart.findOneAndUpdate({userId:userId},{$set:{discount:0 }}) 
         await Cart.findOneAndUpdate({userId:userId},{discountApplied:false})
 })
    } catch (error) {
     console.log(error) 
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
    }
 }
 
@@ -303,7 +324,12 @@ const postCheckOut = async (req,res)=>{
         const userId = req.session.userId
         console.log(userId,"user id in checkout page");
         const paymentOption = req.body.payment_option
+        console.log('in razorpay')
         let addressId = req.body.addressSelect;
+        let discountAmount = req.body.discountAmount
+        let discount = req.body.discount
+        let totals = req.body.Totals
+        console.log(discountAmount,"discountAmount")
        
          let paymentStatus = paymentOption === "COD" ? 'pending' : 'paid';
          let deliveryStatus = paymentStatus === "pending" ? 'OrderProcessing' : 'Order Confirmed'
@@ -318,6 +344,10 @@ const postCheckOut = async (req,res)=>{
        
         let cartTotal = await cartHelper.getCartTotal(userId)
         console.log(cartTotal,"total in place order");
+        let wallet = await Wallet.findOne({userId:userId}) 
+        let walletAmount=wallet.walletAmount
+        console.log(walletAmount)
+
         
         
         addressId=new mongoose.Types.ObjectId(addressId) 
@@ -327,7 +357,8 @@ const postCheckOut = async (req,res)=>{
         
 
         if(paymentOption==='COD'){
-            await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal).then(async(order)=>{
+            let orderId = await orderHelpers.generateUniqueID()
+            await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal,orderId,discountAmount,discount,totals).then(async(order)=>{
 
             await Cart.findOneAndRemove({userId:userId}).then(()=>{cartProductData.forEach((element)=>{    orderHelpers.decreaseStock(element.productId,element.quantity)}) })
                 
@@ -335,41 +366,60 @@ const postCheckOut = async (req,res)=>{
                }
                
             else if(paymentOption==='Razorpay'){ 
-                await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal).then(async(order)=>{
+                let orderId = await orderHelpers.generateUniqueID()
+                await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal,orderId,discountAmount,discount,totals).then(async(order)=>{
 
                console.log(order);
-               orderHelpers.generateRazorPay(order._id,order.totalAmount).then(async(order)=>{
+               orderHelpers.generateRazorPay(order._id,discountAmount).then(async(order)=>{
 
 
                    res.json(order)
 
                })})     
              }
+             else if(paymentOption==="wallet"){
+                if(walletAmount>=cartTotal[0].total){
+                    let orderId = await orderHelpers.generateUniqueID()
+                await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal,orderId,discountAmount,discount,totals).then(async(order)=>{
+                    await Wallet.findOneAndUpdate({userId:userId},{$inc:{walletAmount:-(discountAmount)}}) 
+
+                    await Cart.findOneAndRemove({userId:userId}).then(()=>{cartProductData.forEach((element)=>{    orderHelpers.decreaseStock(element.productId,element.quantity)});
+                    res.json({wallet:true})
+                })})}else{
+                    res.json({wallet:false,message:"insufficient wallet amount"})
+                }
+                
+             }
     } catch (error) {
         console.log(error)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
     }
  }
 
  const verifyPayment = async(req,res)=>{
+   try {
     const userId = req.session.userId;
-      console.log(req.body,"body aaaaaaaaaaaaa");
-      let cartProducts=await Cart.findOne({userId:userId})
-      let cartProductData = cartProducts.product
+    let cartProducts=await Cart.findOne({userId:userId})
+    let cartProductData = cartProducts.product
 
 
-      orderHelpers.verifyPayment(req.body).then(async (response)=>{
-        console.log('in verify payment response')
-        let cartItems=await Cart.findOne({userId:userId})
-        cartItems.product.forEach(element=>{orderHelpers.decreaseStock(element.productId,element.quantity)})
-        await Cart.findOneAndDelete({userId:userId})
-           res.json({ status: true })       
-      }).catch(async ()=>{
-        console.log("payment failedddddddd");
-        res.json({ status: false, errMes: 'payment failed' })
- })
+    orderHelpers.verifyPayment(req.body).then(async (response)=>{
+      let cartItems=await Cart.findOne({userId:userId})
+      cartItems.product.forEach(element=>{orderHelpers.decreaseStock(element.productId,element.quantity)})
+      await Cart.findOneAndDelete({userId:userId})
+         res.json({ status: true })       
+    }).catch(async ()=>{
+      res.json({ status: false, errMes: 'payment failed' })
+})
+   } catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
+   }
 }
 
 const verifyCoupon =async(req,res)=>{
+   try {
     let userId = req.session.userId
     console.log(req.body)
     let couponCode = req.body.couponCode
@@ -384,6 +434,8 @@ const verifyCoupon =async(req,res)=>{
 
     if(carttotal<couponExist.minPurchase){
         res.json({status:false,message:"purchase amount is less"})
+    }else if(carttotal>couponExist.maxPurchase){
+        res.json({status:false,message:"purchase amout is too high"})
     }
    
     else  {
@@ -403,14 +455,23 @@ const verifyCoupon =async(req,res)=>{
     else{
         res.json({status:false,message:"enter a valid coupon"})
     }
+   } catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
+   }
     
 }
 
 
    
 const orderSuccessPage = (req,res)=>{
+try {
     res.render('user/successPage')
-}
+
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+  
+}}
 
 
 const productPage =async (req,res)=>{
@@ -427,91 +488,11 @@ const productPage =async (req,res)=>{
         res.render('user/userproduct',{header:true,userdata, productData,allProducts})   
     }catch(error){   
         console.log(error); 
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
        
     }     
 }
 
-const allPage = async(req,res)=>{
-    try{
-        let pagenumber = req.query.pagenumber||1
-        console.log(req.query.pagenumber);
-        console.log(req.body,"reqbodyyyy")
-        
-        pagenumber = parseInt(pagenumber)
-        let perPage = 3
-
-        let data = await Product.find()
-        let count = data.length
-        let page = Math.round (count/perPage)
-        let totalProducts = await Product.find()
-        .skip((pagenumber-1)*perPage)
-        .limit(perPage) 
-
-        let total = totalProducts.length
-        let category = ""
-        res.render('user/categoryproducts',{header:true,userdata,data,category,totalProducts,total,page,perPage})
-        
-    }catch(e){console.log(e)} 
-}
-
- 
-
-const menPage =async(req,res)=>{
-    try{
-        let pagenumber = req.query.pagenumber||1
-        console.log(req.query.pagenumber);
-        pagenumber = parseInt(pagenumber)
-        let perPage = 3
-
-        let data = await Product.find({category:"men"})
-        let count = data.length
-        let page = Math.round (count/perPage)
-        let totalProducts =await Product.find({category:"men"}).skip((pagenumber-1)*perPage)
-        .limit(perPage)
-    
-        let total = totalProducts.length
-        let category = "MEN"
-       
-        
-        res.render('user/categoryproducts',{header:true,userdata,totalProducts,data,category,total,page,perPage})
-        
-    }catch(e){console.log(e)} 
-}
-const womenPage =async(req,res)=>{
-    try{
-        let pagenumber = req.query.pagenumber||1
-        console.log(req.query.pagenumber);
-        pagenumber = parseInt(pagenumber)
-        let perPage = 3
-        let data = await Product.find({category:"women"})
-        let category = "WOMEN"
-        let count = data.length
-        let page = Math.round (count/perPage)
-        let totalProducts =await Product.find({category:"women"}).skip((pagenumber-1)*perPage)
-        .limit(perPage)
-        let total = totalProducts.length
-        
-        res.render('user/categoryproducts',{header:true,userdata,totalProducts,data,category,total,page,perPage})
-    }catch(e){console.log(e)}
-   
-  }
-  const childPage =async(req,res)=>{
-    try{
-        let pagenumber = req.query.pagenumber||1
-        console.log(req.query.pagenumber);
-        pagenumber = parseInt(pagenumber)
-        let perPage = 3
-        let data = await Product.find({category:"child"})
-        let category = "CHILD"
-        let count = data.length
-        let page = Math.round (count/perPage)
-        let totalProducts =await Product.find({category:"child"}).skip((pagenumber-1)*perPage)
-        .limit(perPage)
-        let total = totalProducts.length
-        res.render('user/categoryproducts',{header:true,userdata,data,totalProducts,category,total,page,perPage})
-    
-    }catch(e){console.log(e)}
-}
 
 const getUserProfile =async (req,res)=>{
    try {
@@ -524,6 +505,8 @@ const getUserProfile =async (req,res)=>{
      res.render('user/myAccount',{header:true,userdata,addressData,errMessage,wallet})
    } catch (error) {    
     console.log(error) 
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
    }
     }
     
@@ -538,6 +521,8 @@ const getUserProfile =async (req,res)=>{
              res.redirect('/userprofile')
         } catch (error) {
             console.log(error) 
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
         }
     }
 
@@ -557,62 +542,103 @@ const getUserProfile =async (req,res)=>{
 else{res.json({status:false})}
  
    } catch (error) {
-    throw(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });
    }
     }
 
     const forgotPassword = async (req,res)=>{
+       try {
         let mob = req.body.mobile
         await client.verify.v2.services(verifySid).verifications.create({to: `+91${mob}`, channel: "sms" }) 
         req.session.mobile=mob
-            res.redirect('/reset-Password')     
+            res.redirect('/reset-Password') 
+       } catch (error) {
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });
+
+       }    
     } 
    
 
     const resetPassword = (req,res)=>{
-        res.render('user/forgotOtp',{errMessage})
+        try {
+            res.render('user/forgotOtp',{errMessage})
         errMessage="" 
+        } catch (error) {
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+        }
     }
 
     const newPasswordPage = (req,res)=>{
-        res.render('user/newpassword')
-    }
+try {
+    res.render('user/newpassword')
+
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
+}    }
    
     const postNewPassword = async(req,res)=>{
         try {
-            let response={} 
-       console.log(req.body)
-       console.log(req.session)
+           
        let mob = req.session.mobile
        mob = parseInt(mob)
        let otp = req.body.otp
-       response=await client.verify.v2.services(verifySid ).verificationChecks.create({ to: `+91${mob}`, code: otp })
+       console.log(mob,"mobile")
+       console.log(otp,"otp")
+      let response=await client.verify.v2.services(verifySid ).verificationChecks.create({ to: `+91${mob}`, code: otp })
        if(response.valid){
         res.redirect('/new-Password')
        } 
-       else{
-       errMessage="otp incorrect" 
+       else{ 
         res.redirect('/reset-Password') 
        }     
         } catch (error) {
             console.log(error)
-            throw error  
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
         }
     }  
 
-    const setNewPassword = async(req,res)=>{
+    const resendPassword = async(req,res)=>{
+       try {
+        let mob = req.session.mobile
+        mob = parseInt(mob)
+        await client.verify.v2.services(verifySid).verifications.create({to: `+91${mob}`, channel: "sms" }) 
+        res.redirect('/reset-Password')
+       } catch (error) {
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
+       }
+        
+    }
+    
+    const getResend = async (req,res)=>{
+       try {
+        let mob = req.session.mobile
+        await client.verify.v2.services(verifySid).verifications.create({to: `+91${mob}`, channel: "sms" }) 
+        req.session.mobile=mob
+            res.redirect('/reset-Password')  
+       } catch (error) {
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
+       }   
+    } 
+
+    const setNewPassword = async(req,res)=>{ 
        try {
         let mobile = req.session.mobile
         let password = req.body.password
         let newHashPassword=await bcrypt.hash(password,10)
         await User.updateOne({mobile:mobile},{$set:{password:newHashPassword}})
         req.session.mobile=""
-        res.redirect('/login')
+        res.json({status:true})
        } catch (error) {
         console.log(error) 
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
        }
     }
-    const searchResult=(req,res)=>{
+  
+    const searchHome=(req,res)=>{
       try {
         const payload = req.body.payload.trim()
         searchHelpers.searchResult(payload).then((searchData)=>{
@@ -622,36 +648,120 @@ else{res.json({status:false})}
         })
       } catch (error) {
         console.log(error)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
       } 
     }
-    const priceHigh = async (req,res)=>{
-        let order = req.body.order
-        order = parseInt(order)  
-     let perPage = 3
-
-     let data = await Product.find()
-     let count = data.length
-     let page = Math.round (count/perPage)
-     let totalProducts = await Product.find().sort({offPrice:order})
-     console.log(totalProducts,"ordered")
-     let total = totalProducts.length
-     let category = ""
-     res.json({status:true})
     
-
-    }
 
 
 const logOut = (req,res)=>{
- req.session.logged = false;
- userdata=req.session.logged
- req.session.destroy()
-res.redirect('/')
+try {
+    req.session.logged = false;
+    userdata=req.session.logged
+    req.session.destroy()
+   res.redirect('/')
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+}
+}
+
+const errorPage = async (req,res)=>{
+    try {
+       res.render('user/error') 
+    } catch (error) {
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+    }
 }
                 
+//shop 
+const shop = async(req,res)=>{
+    try {
+        let userId = req.session.userId
+        let products = await Product.find({deleted:false})
+        console.log(products)
+        res.render('user/shop',{products,header:true,userdata}) 
+    } catch (error) {
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+  
+    }
+}
 
+
+ const sortSearchFilterPagination = async (req, res) => {
+    try {
+      const {
+        selectedSort,
+        selectedPriceRange,
+        selectedBrand,
+        searchQuery,
+        selectedPage,
+        selectedCategory
+      } = req.query;
+         console.log(req.query,"this is from query");
+         console.log(selectedCategory);
+  
+      const sortOptions = {};
+  
+      if (selectedSort === "lowtohigh") {
+        sortOptions["price"] = 1;
+      } else if (selectedSort === "hightolow") {
+        sortOptions["price"] = -1;
+      }
+  
+      let query = {};
+      const selectedBrandsArray = selectedBrand.split(',');
+      if (selectedBrandsArray.includes("all brands")) {
+        // If "all brands" is selected, do not filter by brand
+      } else {
+        query["brand"] = { $in: selectedBrandsArray };
+      }
+  
+      if (selectedPriceRange !== "All") {
+        const [minPrice, maxPrice] = selectedPriceRange.split("-").map(item => parseInt(item, 10));
+        query["price"] = { $gte: minPrice, $lte: maxPrice };
+      }
+      
+  
+      if (searchQuery) {
+        query["productName"] = { $regex: new RegExp(searchQuery, "i") };
+      }
+      const selectedCategoryArray = selectedCategory.split(',');
+      if (selectedCategoryArray.includes("all category")) {
+        // If "all brands" is selected, do not filter by brand
+      } else {
+        query["category"] = { $in: selectedCategoryArray};
+      }
+  
+      const totalCount = await Product.countDocuments(query);
+  
+      // Calculate skip and limit for pagination
+      const skip = (parseInt(selectedPage) - 1) * 6; // Assuming 10 products per page
+      const limit = 6; // Number of products per page
+  
+      // Fetch the products based on the query
+      const products = await Product.find(query)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit);
+  
+      
+  
+      // Send the response as JSON with the fetched products and pagination details
+      res.json({
+        totalProducts: totalCount,
+        currentPage: parseInt(selectedPage),
+        totalPages: Math.ceil(totalCount / limit),
+        products,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+      }
+  }
      
 module.exports ={
+    shop,
     homePage,
     getLoginRegister,
     postRegister,
@@ -666,9 +776,7 @@ module.exports ={
     getRegister,
     productPage,
     logOut,
-    menPage,
-    womenPage,
-    childPage,
+    errorPage,
     getUserProfile,
     editprofile,
     addCart,
@@ -681,9 +789,9 @@ module.exports ={
     postNewPassword,
     newPasswordPage,
     setNewPassword,
-    allPage,
-    searchResult,
-    priceHigh
-   
+    sortSearchFilterPagination,
+    searchHome,
+    resendPassword,
+    getResend,
     
 }

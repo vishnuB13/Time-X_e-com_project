@@ -45,7 +45,7 @@
  </div>
 
  <script>
- 
+// ajax fuction to get bannerpage
 function getBanners(){
   var $j = jQuery.noConflict()
   console.log('in bannerss')
@@ -53,17 +53,16 @@ $j.ajax({
   url:'/admin/view-banner',
   method:'get',
   data:{},
-  success:function(response){
-    
+  success:function(response){  
   },
   error:function(error){}
 })
 }
+// ajax function to add banner
 var $j= jQuery.noConflict()
  
  $j('#banner-form').submit((event) => {
   event.preventDefault();
-
 
   var formData = new FormData($j('#banner-form')[0]);
   for (const [key, value] of formData.entries()) {
@@ -84,8 +83,7 @@ var $j= jQuery.noConflict()
         timer: 1500,
       }).then(() => {
         location.reload();
-      });
-    },
+      })},
     error: function (error) {
       Swal.fire({
         icon: 'error',
@@ -93,9 +91,6 @@ var $j= jQuery.noConflict()
         title: 'Failed adding banner',
         showConfirmButton: false,
         timer: 1500,
-      });
-    },
-  });
-});
+      })}})})
 
  </script>

@@ -43,7 +43,7 @@
                     <td><%= index + 1 %></td>
                    
                     <!-- Rest of the table rows for each product in the order -->
-                    <td><%= item._id %></td>
+                    <td><%= item.orderId %></td>
                     <td><%= item.userId.name %></td>
                    
                     <td>₹<%= item.totalAmount %></td>
@@ -78,6 +78,7 @@
 </main>
 
 <script>
+  
  var $j = jQuery.noConflict();
  $j(document).ready(function() {
     $j('#myTable').DataTable({

@@ -13,7 +13,7 @@ router.get('/logout',middleware.authAdmin, adminController.logOut)
 router.get('/adminhome',middleware.authAdmin, adminController.getAdminHome)
 
 
-router.get('/dashboard',middleware.authAdmin, adminController.adminDashboard)
+router.get('/salesReport',adminController.salesReport)
 
 
 router.get('/userdetails',middleware.authAdmin, adminController.userdetails)

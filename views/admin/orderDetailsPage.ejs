@@ -5,7 +5,7 @@
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Order details</h2>
-                <p>Details for Order ID:<%=order._id%> </p>
+                <p>Details for Order ID:<%=order.orderId%> </p>
             </div>
         </div>
         <div class="card">
@@ -22,7 +22,7 @@
                                 hour12: true
                             }) %><b></b>
                         </span> <br>
-                        <small class="text-muted">Order ID:<%=order._id%></small>
+                        <small class="text-muted">Order ID:<%=order.orderId%></small>
                     </div>
                 </div>
             </header> <!-- card-header end// -->
@@ -97,6 +97,8 @@
                                         <th width="">Unit Price</th>
                                         <th width="">Quantity</th>
                                         <th width="">Total</th>
+                                        <th width="">Discount</th>
+
                                         <th width="">Payment Status</th>
                                         <th width="">Delivery Status</th>
                                         <th width="">Order Id</th>
@@ -115,9 +117,11 @@
                                         <td>₹<%=item.productnetprice%></td>
                                         <td><%=item.quantity%></td>
                                         <td>₹<%=(item.productnetprice*item.quantity)%></td> 
+                                        <td><%=order.discount%></td>
+
                                         <td ><%=item.paymentStatus%></td>
                                         <td ><%=item.deliveryStatus%></td>
-                                        <td><%=item._id%></td>
+                                        <td><%=order.orderId%></td>
                                         <td>
                                           
                                                 <select style="border:none" id="status<%= index %>">
@@ -128,7 +132,7 @@
                                                   <option>Delivered</option>
                                                   <option>Cancelled</option>
                                                 </select>
-                                                <button class="btn btn-primary" onclick="changeStatus('<%= order._id %>','<%= item._id %>','<%= item.productId %>','<%= order.userId %>','<%= item.paymentStatus %>','<%= item.productnetprice %>','<%= order.totalAmount %>','<%= item.quantity %>','<%= item.deliveryStatus %>','<%= index %>')">Change</button>
+                                                <button class="btn btn-primary" onclick="changeStatus('<%= order._id %>','<%= item._id %>','<%= item.productId %>','<%= order.userId %>','<%= item.paymentStatus %>','<%= item.productnetprice %>','<%= order.totalAmount %>','<%= item.quantity %>','<%= item.deliveryStatus %>','<%= index %>','<%=order.orderId%>')">Change</button>
                                               </td>
                                     </tr>                              
                                     <%})%>
@@ -139,9 +143,18 @@
                                                     <dt></dt>
                                                     <dd></dd>
                                                 </dl>
+                                               
+                                                <dl class="dlist">
+                                                    <dt> total:</dt>
+                                                    <dd><b class="h6">₹<%=order.total%></b></dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt>Discount:</dt>
+                                                    <dd><b class="h6">₹<%=order.discount%></b></dd>
+                                                </dl>
                                                 <dl class="dlist">
                                                     <dt>Grand total:</dt>
-                                                    <dd><b class="h5">₹<%=order.totalAmount%></b></dd>
+                                                    <dd><b class="h6">₹<%=order.totalAmount%></b></dd>
                                                 </dl>
                                              
                                             </article>
@@ -159,31 +172,18 @@
 </main>
 
 <script>
-   function changeStatus(orderId, itemId, productId, userId, paymentStatus, productPrice, totalPrice, quantity, deliveryStatus, index){
+    // ajax function to change the order status of single item
+   function changeStatus(orderId, itemId, productId, userId, paymentStatus, productPrice, totalPrice, quantity, deliveryStatus, index,orderid){
         const status = document.getElementById('status' + index).value;        
-        console.log(orderId);
-        console.log(productId);
-        console.log(status);
-        console.log(paymentStatus);
-        console.log(productPrice);//11200
-      
-        console.log(totalPrice);//10348
-        console.log(quantity)
-        console.log(deliveryStatus)
-        
-
         let grandTotal = parseInt(totalPrice)
        let refundAmount = parseInt(productPrice)*75/100
        
-       console.log(refundAmount,"to refunddd");
-       
-
-        
         $.ajax({
             url:'/admin/change-status',
             type:'PATCH',
             data:{
                 orderId:orderId,
+                orderid:orderid,
                 productId:productId,
                 userId:userId,
                 status:status,
@@ -200,12 +200,8 @@
                     title: 'Order status changed successfully',
                     showConfirmButton: false,
                     timer: 1500 
-
                     }).then(()=>{
                         location.reload();
-                    })
-                }
-            })
-        })
-    }
+                    })}})})}
+                    
 </script>
