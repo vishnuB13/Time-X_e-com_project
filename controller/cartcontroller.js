@@ -9,16 +9,19 @@ let quantity = 1;
      
 
 const getCart = async(req,res) =>{ 
-    let userId = req.session.userId;
+    try {
+        let userId = req.session.userId;
 cartHelper.getCartProducts(userId).then(async(cartItems)=>{
     console.log(cartItems);
     let cartTotal = await  cartHelper.getCartTotal(userId)
    if(cartItems.length > 0){ cartTotal = cartTotal[0].total}
     res.render('user/cart',{cartItems,cartTotal,header:true,userdata:true})     
-})   
-} 
+}) 
+    } catch (error) {
+        console.log(error)
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });     }   
+    }  
   
-
 const changeQuantity = async(req,res)=>{
 
 try{
@@ -42,8 +45,8 @@ try{
         }
     }
 }catch(e){
-    console.log(e);   
-}
+    console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } 
 }
 
 const removeCartItem =async (req,res)=>{
@@ -63,7 +66,7 @@ const removeCartItem =async (req,res)=>{
    
    } catch (error) {
     console.log(error)
-   }
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } 
 }
 
 
@@ -108,22 +111,13 @@ const getProductId = async(req,res)=>{
             res.json({status:true})
         }    
  } catch (error) {
-    console.log("catch error")
-        throw error 
-}}
-
-
-       
- 
-
-
+    console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } }
 
 
 module.exports = {
     getCart,
     getProductId,
     changeQuantity,
-    removeCartItem
-
-    
+    removeCartItem   
 }

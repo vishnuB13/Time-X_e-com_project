@@ -107,164 +107,161 @@
             </form>
           </div>
         </div>
-        
-
   </section>
 </main>
 <script>
 
-  $('#categoryDescription').on('change', function() {
-          var categoryId = $(this).val(); 
-          var subcategorySelect = $('#subcategoryDescription'); 
-            $.ajax({
-            url: '/admin/get-subcategories', 
-            method: 'POST',
-            data: { categoryId: categoryId }, 
-            success: function(subcategories) {
-                subcategorySelect.empty();
-              $.each(subcategories, function(index, subcategory) {
-                subcategorySelect.append($('<option>').val(subcategory._id).text(subcategory.sub_category));
-          });
-       }
-    });
-  });
-  let errorName = document.getElementById('name');
-  let errorBrand = document.getElementById('brand')
-  let errorPrice = document.getElementById('Price');
-  let errorStock = document.getElementById('Stock');
-  let errorSize = document.getElementById('Size');
-  let errordescription = document.getElementById('productdescription');
-  let errorCategory = document.getElementById('category')
-  let errorSubCategory = document.getElementById('subcategory');
-  let errorDealprice = document.getElementById('DealPrice');
+//   $('#categoryDescription').on('change', function() {
+//           var categoryId = $(this).val(); 
+//           var subcategorySelect = $('#subcategoryDescription'); 
+//             $.ajax({
+//             url: '/admin/get-subcategories', 
+//             method: 'POST',
+//             data: { categoryId: categoryId }, 
+//             success: function(subcategories) {
+//                 subcategorySelect.empty();
+//               $.each(subcategories, function(index, subcategory) {
+//                 subcategorySelect.append($('<option>').val(subcategory._id).text(subcategory.sub_category));
+//           });
+//        }
+//     });
+//   });
+//   let errorName = document.getElementById('name');
+//   let errorBrand = document.getElementById('brand')
+//   let errorPrice = document.getElementById('Price');
+//   let errorStock = document.getElementById('Stock');
+//   let errorSize = document.getElementById('Size');
+//   let errordescription = document.getElementById('productdescription');
+//   let errorCategory = document.getElementById('category')
+//   let errorSubCategory = document.getElementById('subcategory');
+//   let errorDealprice = document.getElementById('DealPrice');
 
 
-  function validateCategory(){
-      const category = document.getElementById('categoryDescription').value;
-      if(category == ""){
-          errorCategory = "*required"
-          return false;
-      }
-      return true;
-  }
-  function validateSubCategory(){
-      const subcategory = document.getElementById('subcategoryDescription').value;
-      if(subcategory == ""){
-          errorSubCategory = "*required"
-          return false;
-      }
-      return true;
-  }
+//   function validateCategory(){
+//       const category = document.getElementById('categoryDescription').value;
+//       if(category == ""){
+//           errorCategory = "*required"
+//           return false;
+//       }
+//       return true;
+//   }
+//   function validateSubCategory(){
+//       const subcategory = document.getElementById('subcategoryDescription').value;
+//       if(subcategory == ""){
+//           errorSubCategory = "*required"
+//           return false;
+//       }
+//       return true;
+//   }
 
-  function validateProductName() {
-          const name = document.getElementById('productname').value;
-          if (name == "") {
-              errorName.innerHTML = '*required'
-              return false
-          }
-          if (!name.match(/^[a-zA-Z0-9 ]*$/)) {
-              errorName.innerHTML = '*'
-              return false
-          }
-          if (name.match(/^[ ]*$/)) {
-              errorName.innerHTML = '*required'
-              return false
-          }
-          errorName.innerHTML = null
-          return true
-      }
-  function validateBrand(){
-      const brand = document.getElementById('brandname').value;
-      if (brand == "") {
-              errorBrand.innerHTML = '*required'
-              return false
-          }
-          if (!brand.match(/^[a-zA-Z0-9 ]*$/)) {
-              errorBrand.innerHTML = '*'
-              return false
-          }
-          if (brand.match(/^[ ]*$/)) {
-              errorBrand.innerHTML = '*required'
-              return false
-          }
-          errorBrand.innerHTML = null
-          return true
-  }
-  function validPrice() {
-          const price = document.getElementById('price').value
-          if (price == "") {
-              errorPrice.innerHTML = '*required'
-              return false
-          }
-          errorPrice.innerHTML = null
-          return true
-      }
+//   function validateProductName() {
+//           const name = document.getElementById('productname').value;
+//           if (name == "") {
+//               errorName.innerHTML = '*required'
+//               return false
+//           }
+//           if (!name.match(/^[a-zA-Z0-9 ]*$/)) {
+//               errorName.innerHTML = '*'
+//               return false
+//           }
+//           if (name.match(/^[ ]*$/)) {
+//               errorName.innerHTML = '*required'
+//               return false
+//           }
+//           errorName.innerHTML = null
+//           return true
+//       }
+//   function validateBrand(){
+//       const brand = document.getElementById('brandname').value;
+//       if (brand == "") {
+//               errorBrand.innerHTML = '*required'
+//               return false
+//           }
+//           if (!brand.match(/^[a-zA-Z0-9 ]*$/)) {
+//               errorBrand.innerHTML = '*'
+//               return false
+//           }
+//           if (brand.match(/^[ ]*$/)) {
+//               errorBrand.innerHTML = '*required'
+//               return false
+//           }
+//           errorBrand.innerHTML = null
+//           return true
+//   }
+//   function validPrice() {
+//           const price = document.getElementById('price').value
+//           if (price == "") {
+//               errorPrice.innerHTML = '*required'
+//               return false
+//           }
+//           errorPrice.innerHTML = null
+//           return true
+//       }
 
- function validateDealPrice(){
-  const price = document.getElementById('price').value
-      const dealprice = document.getElementById('dealprice').value
-      if(dealprice == ""){
-          errorDealprice.innerHTML = '*required'
-          return false
-      }
-      if(parseInt(dealprice) > parseInt(price)){
-        errorDealprice.innerHTML = 'Dealprice should be lessthan actual price'
-          return false
-      }
+//  function validateDealPrice(){
+//   const price = document.getElementById('price').value
+//       const dealprice = document.getElementById('dealprice').value
+//       if(dealprice == ""){
+//           errorDealprice.innerHTML = '*required'
+//           return false
+//       }
+//       if(parseInt(dealprice) > parseInt(price)){
+//         errorDealprice.innerHTML = 'Dealprice should be lessthan actual price'
+//           return false
+//       }
       
-      errorDealprice.innerHTML = null;
-      return true;
-  }
-   function validStock() {
-          const stock = document.getElementById('stock').value
-          if (stock == "") {
-              errorStock.innerHTML = '*required'
-              return false
-          }if(parseInt(stock) < 0){
-            errorStock.innerHTML = "please provide valid stock"
-            return false;
-          }
-          errorStock.innerHTML = null
-          return true
-      }
-  // function validateSize(){
-  //     const size = document.getElementById('productsize').value
-  //     if(size == ""){
-  //         errorSize.innerHTML = '*required'
-  //         return false
-  //     }
+//       errorDealprice.innerHTML = null;
+//       return true;
+//   }
+//    function validStock() {
+//           const stock = document.getElementById('stock').value
+//           if (stock == "") {
+//               errorStock.innerHTML = '*required'
+//               return false
+//           }if(parseInt(stock) < 0){
+//             errorStock.innerHTML = "please provide valid stock"
+//             return false;
+//           }
+//           errorStock.innerHTML = null
+//           return true
+//       }
+//   // function validateSize(){
+//   //     const size = document.getElementById('productsize').value
+//   //     if(size == ""){
+//   //         errorSize.innerHTML = '*required'
+//   //         return false
+//   //     }
       
-  //     errorSize.innerHTML = null;
-  //     return true;
-  // }    
-  function validateProductDescription() {
-          const name = document.getElementById('Description').value;
-          if (name == "") {
-              errordescription.innerHTML = '*required'
-              return false
-          }
-           if (name.length < 10) {
+//   //     errorSize.innerHTML = null;
+//   //     return true;
+//   // }    
+//   function validateProductDescription() {
+//           const name = document.getElementById('Description').value;
+//           if (name == "") {
+//               errordescription.innerHTML = '*required'
+//               return false
+//           }
+//            if (name.length < 10) {
 
-              errordescription.innerHTML = "enter proper description "
-              return false
-          }
-          errordescription.innerHTML = null
-          return true
-      }
-      function validation() {
-          if (!validateProductName() ||!validateBrand() || !validateProductDescription()  || !validPrice() ||  !validateDealPrice() || !validateSubCategory() ||!validateCategory() || !validStock()) {
-              return false
-          }
-          return true
-      }
+//               errordescription.innerHTML = "enter proper description "
+//               return false
+//           }
+//           errordescription.innerHTML = null
+//           return true
+//       }
+//       function validation() {
+//           if (!validateProductName() ||!validateBrand() || !validateProductDescription()  || !validPrice() ||  !validateDealPrice() || !validateSubCategory() ||!validateCategory() || !validStock()) {
+//               return false
+//           }
+//           return true
+//       }
+
       function viewImage(event) {
       //  const images = document.querySelectorAll('img[id^="imgView"]');
       //  Array.prototype.forEach.call(images, (img, index) => {
       //  img.src = URL.createObjectURL(event.target.files[index]);
 
       document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
-
-
 }
   
 </script>

@@ -44,6 +44,11 @@
                                     <span id="erpurchase" class="text-danger"></span> 
                                 </div>
                                 <div class="mb-4">
+                                  <label class="form-label">Maxinmum Purchace</label>
+                                  <input type="text" placeholder="Type here" class="form-control" id="maxPurchase" name="maxPurchase" onkeyup="minValidation()"> 
+                                  <span id="erpurchase" class="text-danger"></span> 
+                              </div>
+                                <div class="mb-4">
                                     <label class="form-label">Expires on</label>
                                     <input type="date" placeholder="Type here" class="form-control" id="expiresOn" name="expires"  onkeyup="dateValidation()">  
                                     <span id="erdate" class="text-danger"></span> 
@@ -68,6 +73,7 @@
                             <th scope="col">Coupon Code</th>
                             <th scope="col">Discount</th>
                             <th scope="col">Minimum Purchase</th>
+                            <th scope="col">Maximum Purchase</th>
                             <th scope="col">Expire Date</th>
                             <th scope="col" class="text-center">Actions</th>
                            
@@ -82,6 +88,7 @@
                             <td><b><%=item.couponCode%></b></td>
                             <td><%=item.discount%>%</td>
                             <td>₹<%=item.minPurchase%></td>
+                            <td>₹<%=item.maxPurchase%></td>
                             <td><span class="badge rounded-pill alert-warning"><%= new Date(item.expires).toLocaleString('en-US', {
                                 month: 'short',
                                 day: 'numeric',
@@ -145,6 +152,13 @@
                 </div>
               </div>
               <div class="mb-3">
+                <label for="maxPurchase" class="form-label fs-4">Maximum Purchase</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                  <input type="text" id="maxPurchase" name="maxPurchase" class="form-control" required>
+                </div>
+              </div>
+              <div class="mb-3">
                 <label for="cpnExp" class="form-label fs-4">Expires On</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
@@ -170,8 +184,7 @@
 </main>
 
 <script>
-
-
+// ajax function to get coupon modal with  coupon details 
 function editModal(id){
   console.log(id)
   var $j = jQuery.noConflict()
@@ -187,6 +200,7 @@ $j.ajax({
   $j('#couponCode').val(response.couponCode)
         $j('#cpnDiscount').val(response.discount)
         $j('#minkPurchase').val(response.minPurchase)
+        $j('maxPurchase').val(response.maxPurchase)
            var dateValue = response.expires;
            var date = new Date(dateValue);
            var year = date.getFullYear();
@@ -205,24 +219,21 @@ $j.ajax({
 })
 
 
-
+// ajax function to edit coupon details
 
 $j("#saveCouponBtn").click(function(event) {
   event.preventDefault();
   let couponCode = $j('#couponCode').val();
   let discount = $j('#cpnDiscount').val();
   let minPurchase = $j('#minkPurchase').val();
+  let maxPurchase = $j('maxPurchase').val();
   let expires = $j('#cpnExp').val();
   let couponId = $j('#couponId').val();
-  console.log(couponCode, "coupon code");
-  console.log(discount, "discount");
-  console.log(minPurchase, "min purchase");
-  console.log(expires, "expires on");
-  console.log(couponId, "coupon id");
+ 
   let editError = document.getElementById('editError')
   
   // Check if any of the required fields are empty
-  if (!couponCode || !discount || !minPurchase || !expires) {
+  if (!couponCode || !discount || !maxPurchase || !minPurchase || !expires) {
     // Display an error message or handle the empty fields
     editError.innerHTML ='Please fill in all the required fields'
     return; // Stop the execution of the function
@@ -235,6 +246,7 @@ $j("#saveCouponBtn").click(function(event) {
       couponCode,
       discount,
       minPurchase,
+      maxPurchase,
       expires,
       couponId
     },
@@ -352,6 +364,8 @@ $j("#saveCouponBtn").click(function(event) {
             }
             return true
         }
+
+  // ajax function to change the status of coupon
     
    function changeStatus(id){
     Swal.fire({
@@ -379,12 +393,6 @@ $j("#saveCouponBtn").click(function(event) {
               timer: 1500
           }).then(()=>{
             location.reload()
-          })
-            }
-        })
-      })
-    }
-  })
-   }
-  
+          })}})})}})}
+
 </script>

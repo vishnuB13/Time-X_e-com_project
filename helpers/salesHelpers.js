@@ -146,59 +146,41 @@ console.log(monthlySales);
      },
      monthlyTotal:async ()=>{
         try{
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
             let monthlyTotal = await Order.aggregate([
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $match:{
-                       'products.deliveryStatus':{
-                        $nin:['Cancelled','Returned']
-                       }
+                    $match: {
+                        'products.deliveryStatus': {
+                            $nin: ['Cancelled', 'Returned']
+                        },
+                        createdAt: {
+                            $gte: firstDayOfMonth,
+                            $lte: lastDayOfMonth
+                        }
                     }
                 },
                 {
-                 $group:{
-                      _id:{
-                          $dateToString: {
-                          format: '%m-%Y', // format to extract year and month
-                          date: '$createdAt'
-                      }
-                         },
-                    total:{
-                     $sum:'$totalAmount'
-                          }  
-                         
-                  }
-                 },
-                {
-                    $sort:{
-                        '_id':-1
-                    }
-               },
-               {
-                    $limit:7
-               },
-               {
-                  $sort:{
-                        '_id':1
-                    }
-               },
-               {
-                $group: {
-                    _id: null,
-                    totalAmount: {
-                        $sum: '$total'
+                    $group: {
+                        _id: null,
+                        totalAmount: {
+                            $sum: '$totalAmount'
+                        }
                     }
                 }
-              }
+            ]);
     
-            ])
-
-            return monthlyTotal;
+            return monthlyTotal.length > 0 ? monthlyTotal[0].totalAmount : 0; 
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
      },
      yearlySales:async()=>{
@@ -251,6 +233,8 @@ console.log(monthlySales);
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
      },
      yearTotal: async()=>{
@@ -308,6 +292,8 @@ console.log(monthlySales);
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
 
      },
@@ -319,7 +305,7 @@ console.log(monthlySales);
                 },
                 {
                     $match:{
-                    'products.deliveryStatus':{
+                    'products.$.deliveryStatus':{
                         $nin:['Cancelled','Returned']
                     }
                     }
@@ -328,19 +314,18 @@ console.log(monthlySales);
                     $group:{
                         _id:null,
                         salesTotal:{
-                            $sum:'$totalAmount'
+                            $sum:'$total'
                         }
                     }
 
                 }
             ])
-
-           
-
-            return salesTotal
+            return salesTotal.length > 0 ? salesTotal[0].salesTotal : 0; // Return the sales total or 0 if no result
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
      },
      allOrderBasedOnMonths: async ()=>{
@@ -385,6 +370,8 @@ console.log(monthlySales);
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
      },
      cancelledOrders : async ()=>{
@@ -433,6 +420,7 @@ console.log(monthlySales);
             return cancelledOrders;
 
         }catch(e){
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
 
         }
      },
@@ -477,6 +465,7 @@ console.log(monthlySales);
             return returnedOrders;
 
         }catch(e){
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
 
         }
 
@@ -518,6 +507,8 @@ console.log(monthlySales);
 
         }catch(e){
             console.log(e);
+            res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
         }
      }
 }

@@ -39,13 +39,19 @@ const OrderSchema = new mongoose.Schema({
                  paymentStatus:{
                      type: String,
                 },
+                deliveredTimeStamp:{
+                    type:Date
+                },
                 returnReason:{
                     type:String
-                }
+                },
+               
         }
     ],
-  
+    orderId:{ type:String},
     totalAmount: { type: Number, required: true },
+    discount: {type:Number,required:true},
+    total: {type:Number,required:true},
     deliveryStatus: {type:String,required: true},
     createdAt: { type: Date, default: Date.now },
 })  

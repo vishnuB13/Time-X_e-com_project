@@ -43,17 +43,19 @@
                        
 
                       
-                        <form action="/login" method="post" onsubmit="return validation">
+                        <form id="login-Form">
                             <div class="form-group">
                                 <label for="Email">Username or email address *</label>
-                                <input type="text" class="form-control" id="Email"  name="email" onkeydown="validEmail()" required>
+                                <input type="text" class="form-control" id="Email"  name="email"  required>
+                                <span id="error-Email"></span>
                             </div><!-- End .form-group -->
 
                             <div class="form-group">
                                 <label for="singin-password">Password *</label>
-                                <input type="password" class="form-control" id="password" onkeydown="validPassword()" name="password" required>
+                                <input type="password" class="form-control" id="password"  name="password" required>
+                                <span style="margin-left: 20px;color: goldenrod;" id="error-Password"></span>
                             </div><!-- End .form-group -->
-
+                                <span style="margin-left: 20px;color: goldenrod;" id="login-error"></span>
 
                             <div class="form-footer" id="buttonlogin">
 
@@ -114,9 +116,74 @@
         
                    
 <script>
-let errorEmail = document.getElementById('error-Email')
-let errorPassword = document.getElementById('error-Password')
-console.log(errorEmail)
+
+let loginForm = document.getElementById('login-Form')
+
+function handleSubmit(event){
+    event.preventDefault()
+    
+    function validEmail() {
+        let errorEmail = document.getElementById('error-Email')
+        const email = document.getElementById('Email').value
+        
+        if (email == "") {
+            errorEmail.textContent = "Enter your email address"
+            return false
+        }
+        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
+            errorEmail.textContent = 'Enter a proper email address'
+            return false
+        }
+        errorEmail.textContent = null
+        return true
+    }
+
+    function validPassword() {
+        let errorPassword = document.getElementById('error-Password')
+
+        const psd = document.getElementById('password').value
+        if (psd == "") {
+            errorPassword.textContent = "Enter a password"
+            return false
+        }
+        if (psd.length < 5) {
+			
+            errorPassword.textContent = "password must contain 6 characters";
+            return false
+        }
+        errorPassword.textContent = null
+        return true
+    
+    }
+    function validation(){
+        if(validEmail&&validPassword){
+            const psd = document.getElementById('password').value
+            const email = document.getElementById('Email').value
+
+            fetch("/login", {
+        method: "POST", // or "GET" depending on your server-side endpoint
+        body: JSON.stringify({email:email, password: psd }), // You can send any data you want to the server
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response)=>response.json()
+).then((data)=>{
+    
+        console.log(data,"data")
+        if(data.status){location.href='/'}
+        else{
+            let errorLogin = document.getElementById('login-error')
+            errorLogin.textContent = data.message
+        }
+    })
+        }
+    }
+    
+    validEmail();
+    validPassword();
+    validation()
+}
+loginForm.addEventListener('submit',handleSubmit)
 
 function showModal(){
     var modal = $("#number-Modal");
@@ -134,43 +201,6 @@ function showModal(){
 
 
  
-  function validEmail() {
-        const email = document.getElementById('Email').value
-        console.log(email,"emaillllll")
-        if (email == "") {
-            errorEmail.innerHTML = "Enter your email address"
-            return false
-        }
-        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
-            errorEmail.innerHTML = 'Enter a proper email address'
-            return false
-        }
-        errorEmail.innerHTML = null
-        return true
-    }
-
-    function validPassword() {
-        const psd = document.getElementById('password').value
-        if (psd == "") {
-            errorPassword.innerHTML = "Enter a password"
-            return false
-        }
-        if (psd.length < 5) {
-			
-            errorPassword.innerHTML = "Enter valid password";
-            return false
-        }
-        errorPassword.innerHTML = null
-        return true
-    
-    }
-
-       
-    function validation() {
-        if (!validEmail() || !validPassword() ) {
-            return false
-        }
-        return true
-    }
+ 
 
 </script>

@@ -79,14 +79,65 @@
         <form action="/otpfirst" method="post">
             <div class="form-group">
                 <label for="otp-input">Enter OTP:</label>
-                <input type="number" id="otp-input" name="otp" required>
+                <input type="string" id="otp-input" name="otp" required>
             </div>
-            <button type="submit">Submit</button>
+            <span id="otp-error"></span>
+            <button id="submit-button" type="submit">Submit</button>
+            
+            <a  href="/otpfirst" type="post"><button style="display: none;color: white;background-color: goldenrod;border: none;border-radius: 50px;" id="resend-button" type="button">resend Otp</button>
+
         </form>
     </div>
 </body>
 
 </html>
+<script>
+    function resendTimer() {
+    let time = 30;
+    let resendButton = document.getElementById("resend-button");
+    let submitButton = document.getElementById('submit-button')
 
+    // Initial display of the button
+    resendButton.style.display = 'none';
+
+    const interval = setInterval(function() {
+        time--;
+        otpError.innerHTML= "Enter otp in"+ " "+ time + " seconds"
+        if (time <= 0) {
+
+            clearInterval(interval);
+            submitButton.style.display="none"
+            resendButton.style.display = 'block';
+            otpError.innerHTML="otp timed out.click resend button"
+        }
+    }, 1000); // Interval of 1000ms (1 second) for the countdown
+}
+
+    
+       let otpError = document.getElementById('otp-error')
+    function validOtp(){
+        const otp= document.getElementById('otp-input').value
+        console.log(otp,"otppppppppppp")
+    if (otp == "") {
+        otpError.innerHTML = "Enter your OTP"
+        return false
+    }
+    if (otp.length < 6 || !otp.match(/^\d*$/)) {
+        otpError.innerHTML = "Please Enter the 6 digit valid OTP"
+        return false
+    }
+
+    if (otp.length > 6) {
+        otpError.innerHTML = "Please Enter the 6 digit valid OTP"
+        return false
+    }
+    otpError.innerHTML = null
+    return true
+    }
+    window.onload = function() {
+   resendTimer(); // This will automatically start the timer and display the button after 30 seconds
+};
+
+</script>
 
 

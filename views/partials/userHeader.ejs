@@ -55,25 +55,8 @@
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
-                                    <a href="/allproducts" class="sf-with-ul">ALL</a>
-
-                                    
-                                </li>
-                                <li>
-                                    <a href="/men" class="sf-with-ul">MEN</a>   
-                                </li>
-                                <li>
-                                    <a href="/women" class="sf-with-ul">WOMEN</a>
-
-                                   
-                                </li>
-                                <li>
-                                    <a href="/children" class="sf-with-ul">CHILD</a>
-
-                                 
-                                </li>
-                               
-                               
+                                    <a href="/shop" class="sf-with-ul">SHOP</a> 
+                                </li>  
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
@@ -118,12 +101,12 @@ function sendData(e){
     console.log(e,"eeeeeeeeeeee")
     let match = e.value.match(/^[a-zA-z0-9 ]*/);
     let match2 = e.value.match(/[ ]*/);
-    if(match2[0] === e.value){
+    if(match2[0] === e.value){ 
         searchData.innerHTML = '';
         return;
     }
     if(match[0] === e.value){
-        fetch('/searchResult',{
+        fetch('/searchHome',{
             method:'POST',
             headers: {'content-Type': 'application/JSON'},
             body: JSON.stringify({payload: e.value})

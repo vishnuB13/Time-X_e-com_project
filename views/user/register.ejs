@@ -35,8 +35,8 @@
         <div class="tab-content" id="tab-content-5">
             <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                 <% if(errMessage != ""){ %>
-                    <div class="alert alert-warning alert-dismissible fade show"  role="alert" id="warningAlert" style="padding: 10px; background-color: lightsalmon;">
-                      <%=  errMessage %>
+                    <div  class="alert alert-warning alert-dismissible fade show"  role="alert" id="warningAlert" style="padding: 10px; background-color: lightsalmon;">
+                      <span id="errorMessage"><%=  errMessage %></span>
                       <button type="button" class="close" onclick="closeAlert()" aria-label="Close" fdprocessedid="bi0wev">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -44,52 +44,123 @@
                  <% } %>
 
               
-                 <form action="/registers" method="post">
+                 <form id="register-Form">
                     <div class="form-group">
                        
                         <label for="register-password">UserName *</label>
-                        <input type="text" class="form-control" id="register-password" name="name" required>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div><!-- End .form-group -->
 
                     <div class="form-group">
                         <label for="register-email">Your email address *</label>
-                        <input type="email" class="form-control" id="register-email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <span class="text-danger" id="email-Span"></span>
                     </div><!-- End .form-group -->
 
                     <div class="form-group">
                         <label for="register-password">Mobile Number *</label>
-                        <input type="tel" class="form-control" id="register-password" name="mobile" required>
+                        <input type="tel" class="form-control" id="mobile" name="mobile" required>
                     </div><!-- End .form-group -->
-
-
                     <div class="form-group">
                         <label for="register-password">Password *</label>
-                        <input type="password" class="form-control" id="register-password" name="password" required>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <span class="text-danger" id="error-Password"></span>
                     </div><!-- End .form-group -->
-
                     <div class="form-group">
                         <label for="register-password">Confirm Password *</label>
-                        <input type="password" class="form-control" id="register-password" name="password1" required>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                        <span class="text-danger" id="password2"></span>
                     </div><!-- End .form-group -->
-
-
+                    <span class="text-danger" id="span-All"></span>
                     <div class="form-footer" id="signupbutton">
                         <button type="submit" class="btn btn-outline-primary-2">
                             <span>REGISTER</span>
                             <i class="icon-long-arrow-right"></i>
-                        </button>
-
-                      
+                        </button> 
                     </div><!-- End .form-footer -->
-                </form>
-
-
-               
+                </form> 
             </div><!-- .End .tab-pane -->
         </div>
     </div>
 </div>
 <script>
+let registerForm = document.getElementById('register-Form')
+function validation(event){
+    event.preventDefault()
+    function emailValid(){
+        let emailError = document.getElementById('email-Span')
+        let email = document.getElementById('email').value
+        if(email==""){
+            emailError.textContent="Field should not empty"
+            return false
+        }
+        else if(!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)){
+            emailError.textContent="invalid email format"
+            return false
+        }
+        else{
+             emailError=""
+             return true
+        }
+    }
+    function validPassword() {
+        let errorPassword = document.getElementById('error-Password')
+
+        let psd = document.getElementById('password').value
+        if (psd == "") {
+            errorPassword.textContent = "Enter a password"
+            return false
+        }
+        if (psd.length < 5) {
+			
+            errorPassword.textContent = "password must contain 6 characters";
+            return false
+        }
+        errorPassword.textContent = null
+        return true
+    }
+
+    function passwordMatch(){
+        let psd = document.getElementById('password').value
+        let password1 = document.getElementById('password1').value
+        let confirmError = document.getElementById('password2')
+        if(psd!=password1){
+            confirmError.textContent = "password mismatch"
+            return false
+        }
+        confirmError.textContent = ""
+        return true
+    }
+    emailValid()
+    passwordMatch()
+    validPassword()
+    let name =  document.getElementById('name').value
+    let psd = document.getElementById('password').value
+    let email = document.getElementById('email').value
+    let mobile = document.getElementById('mobile').value
+   
+    fetch('/register', {
+        method: "POST", // or "GET" depending on your server-side endpoint
+        body: JSON.stringify({name:name, email:email, mobile:mobile, password: psd }), // You can send any data you want to the server
+        headers: {
+          "Content-Type": "application/json",
+        },
+    }).then((response)=>response.json())
+    .then((data)=>{
+        console.log(data,"dataa")
+        if(data.status){
+        location.href='/otpfirst'
+        }else{
+            let spanAll = document.getElementById('span-All')
+        spanAll.textContent=data.errMessage
+        } 
+    })
+    let spanAll = document.getElementById('span-All')
+        spanAll.textContent = ""   
+}
+
+registerForm.addEventListener('submit',validation)
+
     function closeAlert(){
         $('#warningAlert').alert('close'); 
     }

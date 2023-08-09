@@ -7,14 +7,14 @@ const orderHelpers = require('../helpers/orderHelpers');
 
 
 const returnOrder = async(req,res)=>{
-    console.log(req.body)
-   let userId = req.session.userId
+  try {
+    let userId = req.session.userId
     let orderId = req.body.orderId
     let itemId = req.body.ItemId
     let productId = req.body.productId
     let count = req.body.quantity
-    let refundAmount = req.body.refundAmount
-    parseInt(refundAmount)
+    let refundAmount = req.body.discountAmount
+   refundAmount= parseInt(refundAmount)
     itemId = new mongoose.Types.ObjectId(itemId)
     orderId = new mongoose.Types.ObjectId(orderId)
     let order = await Order.findOne({ _id: orderId });
@@ -30,19 +30,18 @@ const returnOrder = async(req,res)=>{
       orderHelpers.increaseStock(productId, count);
     }
 
-    // Save the updated order document 64ae9f941299e361f949de6f
     await order.save();
-    
-    
-     
-    
 
     res.json({status:true})
-
-    // Update the deliveryStatus of the specific item
+  } catch (error) {
+    console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } 
    
 }
+
+
 const getOrderPage = async(req,res)=>{
+   try {
     const userId = req.session.userId
     let userOrder = await Order.find({userId:userId}).sort({createdAt:-1})
     let cartTotal = carthelper.getCartTotal 
@@ -52,6 +51,9 @@ const getOrderPage = async(req,res)=>{
     }else{
       res.redirect('/login')
     }
+   } catch (error) {
+    console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } 
    
 }
 const cancelOrder = async (req, res) => {
@@ -113,8 +115,8 @@ const cancelOrder = async (req, res) => {
 
     res.json({ status: true });
   } catch (error) {
-    console.log(error);
-  }
+    console.log(error)
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });     } 
 };
 
 
@@ -124,3 +126,7 @@ getOrderPage,
 cancelOrder
 
 } 
+
+
+
+

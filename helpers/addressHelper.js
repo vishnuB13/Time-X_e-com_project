@@ -38,6 +38,8 @@ const addAddress = async (userId,userData)=>{
     }
    }catch(e){
     console.log(e);
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
    }
 }
 
@@ -48,6 +50,8 @@ const editAddress =async (userId,addressId)=>{
         return address;
     }catch(e){
         console.log(e);
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
     }
 }
 
@@ -59,12 +63,19 @@ const getDeliveryAddress = async (userId,addressId)=>{
        return deliveryAddress
       }catch(e){
         console.log(e);
+        res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
     }
 }
 
 const validBanner = async()=>{
-let banner=await Banner.find()
+try {
+    let banner=await Banner.find()
 return banner
+} catch (error) {
+    res.status(500).render('user/error', { message: "An error occurred while processing your request." });   
+
+}
 }
 
 

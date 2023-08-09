@@ -42,29 +42,35 @@
 }
 
 </style>
+<%if(!userOrder.length){%>
+    <h3 style="color: goldenrod;text-align: center;margin-top: 200px;margin-bottom: 200px;">no orders yet</h3>
+    <%} else {%>
 
 <section class="mt-50 mb-50">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
-                    <table class="table shopping-summery text-center clean">
+                    <table style="justify-content: space-evenly;" class="table shopping-summery text-center clean">
                         <thead>
                             <tr class="main-heading">
                                 
                                 <th style="color: goldenrod" scope="col"><strong>Name</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Price</strong> </th>
-                                <th style="color: goldenrod" scope="col"><strong>Count</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>No</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>discount</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>Paid</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Total</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Payment</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Status</strong> </th>
+                                <th style="color: goldenrod" scope="col"><strong>orderId</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Address</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>ordered on</strong> </th>
                                 <th style="color: goldenrod" scope="col"><strong>Options</strong></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%userOrder.forEach(order=>{%>
+                                <%userOrder.forEach(order=>{%>
 
                            
                                 <%order.products.forEach(item=>{%>
@@ -72,23 +78,24 @@
                                         <tr>
                                 
                                             <td class="product-des product-name">
-                                                <h5 class="font-xs pt-2"><%= item.productname %>
-                                                </h5>
+                                               <p><strong style="color: red;"><%= item.productname %></strong></p>
                                             </td>
-                                            <td class="price" data-title="Price"><span>₹<%= item.productnetprice%></span></td>
+                                            <td class="price" data-title="Price"><span><strong>₹<%= item.productnetprice%></strong></span></td>
                                            
                                             <td class="text-center" data-title="Quantity"><%= item.quantity%></td>
+                                            <td class="text-center" data-title="Quantity"><%= order.discount %></td>
+
                                             
                                             <td class="text-center" data-title="Subtotal">
-                                                <span>₹<%= item.totalAmount%></span>
+                                                <span>₹<%= order.totalAmount%></span>
                                             </td>
+                                            <td class="text-center" data-title="paymentmethod"><%=order.total%></td>
+
                                             <td class="text-center" data-title="paymentmethod"><%=order.paymentMethod%></td>
                                             <td class="text-center" data-title="status"><%=item.deliveryStatus%></td>
+                                            <td class="text-center" data-title="status"><%=order.orderId%></td>
+
                                             <td> 
-                                                
-                                                   
-                                                
-                                                
                                                 <p><%= order.deliveryDetails.streetaddress %></p> 
                                                 <p><%= order.deliveryDetails.appartment %></p> 
                                                 <p><%= order.deliveryDetails.state %>,<%= order.deliveryDetails.town %></p>
@@ -109,24 +116,21 @@
                                                     <%}else{%>
                                                         <button class="btn btn-danger " 
 
-                                                        onclick="cancelOrder('<%=order._id%>','<%=item._id%>','<%=item.productId%>','<%=item.quantity%>','<%=order.paymentStatus%>','<%=item.productnetprice%>','<%=cartTotal.total%>','<%=order.paymentMethod%>','<%=item.deliveryStatus%>')">
+                                                        onclick="cancelOrder('<%=order._id%>','<%=item._id%>','<%=item.productId%>','<%=item.quantity%>','<%=order.paymentStatus%>','<%=item.productnetprice%>','<%=cartTotal.total%>','<%=order.paymentMethod%>','<%=item.deliveryStatus%>','<%=order.totalAmount%>')">
                                                         
                                                         Cancel Order
                                                          
                                                         </button>
                                                         <%}%>
-                                                </td>
+                                            </td>
                                             <%}else{%>  
                                                 <td class="action-col">
                                                 
-                                                    <button class="btn btn-primary"onclick="returnOrder('<%=order._id%>','<%=item._id%>','<%=item.productId%>','<%=item.quantity%>','<%=item.productnetprice%>')">Return</button>
+                                                    <button  class="btn btn-primary"onclick="returnOrder('<%=order._id%>','<%=item._id%>','<%=item.productId%>','<%=item.quantity%>','<%=item.productnetprice%>')">Return</button>
                                                   
-                                                    </td>
+                                                 </td>
                                             <%}%>  
-                                          
                                         </tr>
-                                 
-                           
                             <% })%> 
                            <%})%>
                         </tbody>
@@ -135,25 +139,12 @@
         </div>
     </div>
 </section> 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%}%>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
 <script>
-    function cancelOrder(orderId,itemId,productId,quantity,paymentSatus,productPrice,grandTotal,paymentMethod,deliveryStatus){
-        console.log(orderId,"orderid");
-        console.log(productId,"product id");
-        console.log(quantity,"quantity");
-        console.log(paymentSatus,"payment status");
-        console.log(productPrice,'product price');
-        console.log(grandTotal,"grand Total");
-        console.log(paymentMethod,"payment method")
-        console.log(deliveryStatus,"delivery status")
-       console.log(itemId)
-
+// ajax function to cancel order
+    function cancelOrder(orderId,itemId,productId,quantity,paymentSatus,productPrice,grandTotal,paymentMethod,deliveryStatus,discountAmount){
         let refundAmount = ( productPrice*quantity)
-        console.log(refundAmount);
-
         Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -163,22 +154,23 @@
                 cancelButtonColor: '#4CAF50',
                 confirmButtonText: 'Yes, cancel it!'
               }).then((result)=>{
+                console.log(result,"resultttt")
                 if(result.isConfirmed){
-                    $.ajax({
-                        url:'/cancel-order',
-                        type:'PATCH',
-                        data:{
-                           orderId:orderId,
-                           productId:productId,
+                            $.ajax({
+                            url:'/cancel-order',
+                            type:'PATCH',
+                            data:{
+                            orderId:orderId,
+                            productId:productId,
                             quantity:quantity,
                             paymentSatus:paymentSatus,
                             deliveryStatus:deliveryStatus,
-                            refundAmount:refundAmount,
+                            refundAmount:discountAmount,
                             paymentMethod:paymentMethod,
                             itemId:itemId
                         },
                         success:((response)=>{
-                            if(response.status){
+                               if(response.status){
                                 Swal.fire({
                                 position: 'center',
                                 icon: 'success',
@@ -187,20 +179,17 @@
                                 timer: 1500
                                 }).then(()=>{
                                     location.reload()
-                                })
-                            }
-                        }),error:((error)=>{ Swal.fire({
+                                })}}),
+                                error:((error)=>{ Swal.fire({
                                 position: 'center',
                                 icon: 'success',
                                 title: 'Order cancelling failed',
                                 showConfirmButton: false,
                                 timer: 1500
-                                })})
-                })
-            }  })
-    }
- 
-    function returnOrder(orderId,ItemId,productId,quantity,refundAmount){  
+                                })})})}})}
+
+ // ajax function to return order
+    function returnOrder(orderId,ItemId,productId,quantity,discountAmount){  
        
       Swal.fire({
             title: 'Are you sure?',
@@ -224,21 +213,20 @@
                       
 
                         if (text) {
-                           
-                            $.ajax({
-                                url:'/return-order',
-                                type:'PATCH',
-                                data:{
+                                    $.ajax({
+                                    url:'/return-order',
+                                    type:'PATCH',
+                                    data:{
                                     orderId,
                                     productId,
                                     quantity,
                                     text,
                                     ItemId,
-                                    refundAmount
-                                },
-                                success:((response)=>{
+                                    discountAmount
+                                    },
+                                    success:((response)=>{
                                     console.log('in response')
-                                Swal.fire({
+                                    Swal.fire({
                                     position: 'center',
                                     icon: 'success',
                                     title: 'Return request submitted successfully',
@@ -246,21 +234,12 @@
                                     timer: 1500
                                     }).then(()=>{
                                         location.reload();
-                                    })
-
-                                }),error:((error)=>{
+                                    })}),error:((error)=>{
                                     Swal.fire({
                                     position: 'center',
                                     icon: 'success',
                                     title: 'Return request not submitted',
                                     showConfirmButton: false,
                                     timer: 1500
-                                    })
-                                })
-
-                            })
-                }
-            }
-        })
-      }
+                                    })})})}}})}  
 </script>
