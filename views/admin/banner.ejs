@@ -75,7 +75,8 @@ var $j= jQuery.noConflict()
     processData: false,
     contentType: false,
     success: function (response) {
-      Swal.fire({
+      if(response.status){
+        Swal.fire({
         icon: 'success',
         position: 'top-end',
         title: 'Successfully added banner',
@@ -83,7 +84,17 @@ var $j= jQuery.noConflict()
         timer: 1500,
       }).then(() => {
         location.reload();
-      })},
+      })
+      }else{
+        Swal.fire({
+        icon: 'error',
+        position: 'top-end',
+        title: 'Failed adding banner',
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(()=>{location.reload()})
+      }
+      },
     error: function (error) {
       Swal.fire({
         icon: 'error',
@@ -91,6 +102,6 @@ var $j= jQuery.noConflict()
         title: 'Failed adding banner',
         showConfirmButton: false,
         timer: 1500,
-      })}})})
+      }).then(()=>{})}})})
 
  </script>

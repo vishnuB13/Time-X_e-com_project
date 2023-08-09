@@ -555,7 +555,6 @@ try {
         }
       try{
         const newBanner = {
-            id: req.body.id,
             imageUrl: req.files.length > 0 ? req.files[0].filename : 'assets/images/banner.jpg',
             link: req.body.link,
             altText: req.body.altText,
