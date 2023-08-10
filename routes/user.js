@@ -64,7 +64,7 @@ router.patch('/cart/changequantity',cartController.changeQuantity)
 router.delete('/remove-item',middleware.userAuth,cartController.removeCartItem);
  
   
-router.get('/successPage',userController.orderSuccessPage)
+router.get('/successpage',userController.orderSuccessPage)
 router.get('/orders',middleware.userAuth,orderController.getOrderPage)
 router.patch('/cancel-order',orderController.cancelOrder) 
 router.patch('/return-order',orderController.returnOrder)
