@@ -102,7 +102,7 @@ button#close-Modal:hover {
                 <form action="/checkOut" id="form" method="post">
                     <div class="row">
                         <div class="col-lg-6">
-                        <%if(addressData){%>
+
                         <% addressData.address.forEach(item => { %>
                             <div class="card card-dashboard">
                                 <div class="card-body">
@@ -122,7 +122,6 @@ button#close-Modal:hover {
                                     </div><!-- End .card-body -->
                                 </div><!-- End .card-dashboard -->   
                         <% }) %>
-                        <%}%>
                         <button   style="background-color: white; color: black;border-color: goldenrod;border-width: 1px;"   onclick="showModal()" id="add-address-button"> <span style="color: goldenrod;">add address <strong>   +</strong></span></button> 
                         </div>
                     

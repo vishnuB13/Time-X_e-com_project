@@ -466,7 +466,7 @@ const verifyCoupon =async(req,res)=>{
    
 const orderSuccessPage = (req,res)=>{
 try {
-    res.render('user/successPage')
+    res.render('user/successpage')
 
 } catch (error) {
     res.status(500).render('user/error', { message: "An error occurred while processing your request." });
