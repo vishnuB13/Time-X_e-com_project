@@ -38,7 +38,7 @@ button#close-Modal:hover {
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
-
+<% var total %>
     <% if(cartItems) { %>
     <div class="page-content">
         <div class="checkout">
@@ -142,7 +142,7 @@ button#close-Modal:hover {
                                 </thead>
                                 <tbody>
                                 
-                                    <% if(!cartTotal) { %> 
+                                    <% if(!cartTotal.length) { %> 
                                     <tr class="summary-subtotal">
                                         <td>Products:</td>
                                         

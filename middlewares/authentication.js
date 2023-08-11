@@ -38,8 +38,9 @@ let authAdmin = (req, res, next) => {
    
 }
 let cartCheck = async (req,res,next)=>{
-let cartItems=await Cart.find()
-if(!cartItems.length){res.redirect('/')}
+let cartItems=await Cart.findOne({userId:req.session.userId})
+console.log(cartItems,"cartItemssss")
+if(cartItems===null){res.redirect('/')}
 else{next()}
 }
 

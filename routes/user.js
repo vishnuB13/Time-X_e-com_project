@@ -33,10 +33,8 @@ router.delete('/removeWishlist',userController.removeWishList)
 router.get('/checkout',middleware.userAuth,middleware.cartCheck,userController.getCheckout)
 router.post('/checkOut',middleware.cartCheck,userController.postCheckOut) 
 router.post('/verify-payment',userController.verifyPayment)
-router.post('/verify-coupon',userController.verifyCoupon)
+router.post('/verify-coupon',userController.verifyCoupon) 
  
-    
-   
 
 router.get('/userprofile',middleware.userAuth, userController.getUserProfile) 
 router.get('/editprofile',userController.editprofile)    
