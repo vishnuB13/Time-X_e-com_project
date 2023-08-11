@@ -69,6 +69,11 @@ router.patch('/return-order',orderController.returnOrder)
  
 router.post('/searchHome',userController.searchHome)
  
+
+router.use((req, res, next) => {
+    // You can customize the error message or render an error page here
+    res.status(404).render('user/error',{message:"Oops!....Page not Found"});
+  });
  
          
 module.exports=router  
