@@ -43,8 +43,8 @@ button#close-Modal:hover {
     <div class="page-content">
         <div class="checkout">
             <div class="container">
-                <% if (coupon) { %>
-                    <div id="checkout-box" class="checkout-discount">
+               
+                    <div id="checkout-box"  >
                         
                             <input type="text" class="form-control"  name="coupon" value="coupon" required id="checkout-discount-input">
                             <button type="button" id="applyCouponId"  style="background-color: goldenrod;border: none;border-radius: 50px;">apply coupon</button>
@@ -53,7 +53,7 @@ button#close-Modal:hover {
                        
                     </div><!-- End .checkout-discount -->
                    
-
+                    <% if (coupon) { %>
                       <div id="couponModal" class="modal">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -166,7 +166,7 @@ button#close-Modal:hover {
                                     <tr class="summary-total">
                                         <td>discount:</td>
                                         <td>₹<%=  cartTotal[0].discount%></td>
-                                        <input type="hidden" name="discount" value="<%=cartTotal[0].discount%>">
+                                        <input type="hidden" name="discount" id="discount" value="<%=cartTotal[0].discount%>">
                                     </tr>
                                     <tr class="summary-total">
                                         <td>Grand Total:</td>
@@ -397,6 +397,12 @@ button#close-Modal:hover {
 
 
 <script>
+    const discount =  document.getElementById('discount').value
+    console.log(discount,'')
+    if(discount>0){
+        document.getElementById('checkout-box').style.display = 'none'
+    }
+
  const placeOrderButton = document.getElementById("place-order-button");
  const addressCheckboxes = document.getElementsByClassName("address-checkbox");
 
@@ -555,6 +561,7 @@ function  razorpayPayment(order){
     let applycouponbutton = document.getElementById('applyCouponId')
     applycouponbutton.addEventListener('click', function(event){
         let couponCode=document.getElementById('checkout-discount-input').value
+        
         event.preventDefault()
        
             $.ajax({
@@ -571,7 +578,11 @@ function  razorpayPayment(order){
   title: response.message,
   showConfirmButton: false,
   timer: 1500
-}).then(location.href='/checkout')
+}).then(()=>{ 
+     location.href = '/checkout';
+    
+    }
+   )
  }else{
  Swal.fire({
   position: 'top-end',

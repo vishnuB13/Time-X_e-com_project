@@ -307,7 +307,7 @@ const getCheckout =async (req,res)=>{
         let coupon = await Coupon.find({"statusEnable":true})
         let wallet = await Wallet.findOne({userId:userId}) 
     res.render('user/checkout',{header:true,userdata:true,cartTotal,cartItems,addressData,coupon,wallet})
-       
+  
 })
    } catch (error) {
     console.log(error) 
@@ -366,10 +366,13 @@ const postCheckOut = async (req,res)=>{
                
             else if(paymentOption==='Razorpay'){ 
                 let orderId = await orderHelpers.generateUniqueID()
-               
-                await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal,orderId,discountAmount,discount,totals).then(async(order)=>{           
-                orderHelpers.generateRazorPay(order._id,discountAmount).then(async(order)=>{
-                res.json(order)
+                await orderHelpers.placeOrder(addressfind,paymentOption,paymentStatus,deliveryStatus,userId,cartProductData,cartTotal,orderId,discountAmount,discount,totals).then(async(order)=>{
+
+               console.log(order);
+               orderHelpers.generateRazorPay(order._id,discountAmount).then(async(order)=>{
+
+
+                   res.json(order)
 
                })})     
              }
@@ -403,7 +406,7 @@ const postCheckOut = async (req,res)=>{
     orderHelpers.verifyPayment(req.body).then(async (response)=>{
       let cartItems=await Cart.findOne({userId:userId})
       cartItems.product.forEach(element=>{orderHelpers.decreaseStock(element.productId,element.quantity)})
-      await Cart.findOneAndRemove({userId:userId})
+      await Cart.findOneAndDelete({userId:userId})
          res.json({ status: true })       
     }).catch(async ()=>{
       res.json({ status: false, errMes: 'payment failed' })
