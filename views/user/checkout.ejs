@@ -118,7 +118,7 @@ button#close-Modal:hover {
                                         <%= item.zip %><br>
                                         <label for="checkbox">select</label>
                                         <input type="checkbox" name="addressSelect" class="address-checkbox" value="<%= item._id %>">
-                                        <button style="background-color: whitesmoke;color: goldenrod;border: none;margin-right: auto;margin-left: 10px;" id="delete-button" onclick="deleteAddress('<%=item._id%>')" >Delete Address</button>
+                                        <button style="background-color: whitesmoke;color: goldenrod;border: none;margin-right: auto;margin-left: 10px;" onclick="deleteAddress('<%=item._id%>')" >Delete Address</button>
                                     </div><!-- End .card-body -->
                                 </div><!-- End .card-dashboard -->   
                         <% }) %>
@@ -127,6 +127,7 @@ button#close-Modal:hover {
                             <%}%>
                         <button   style="background-color: white; color: black;border-color: goldenrod;border-width: 1px;"   onclick="showModal()" id="add-address-button"> <span style="color: goldenrod;">add address <strong>   +</strong></span></button> 
                         </div>
+                    </form><!-- End #form -->
                     
                     <aside class="col-lg-5">
                         <div class="summary">
@@ -220,7 +221,7 @@ button#close-Modal:hover {
                         </div><!-- End .summary -->
                     </aside>
                 </div><!-- End .col-lg-5 -->
-                </form><!-- End #form -->
+               
             </div><!-- End .container -->
         </div><!-- End .checkout -->
 
@@ -376,7 +377,7 @@ button#close-Modal:hover {
                           </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" onclick="closeAddressModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" onclick="addAddress()" class="btn btn-primary bg-info border-0" id="saveAddress" ><i class="bi bi-save"></i> Save Changes</button>
                             </div>
                         
@@ -581,32 +582,18 @@ function  razorpayPayment(order){
 })}})})})
 
 function showModal(){
+    event.preventDefault()
     var modal = $("#addAddresModal");
         // error.innerHTML = ""
         modal.modal("show");
 }
-// ajax function to add adress at checkout
-function addAddress(){
-
-    $.ajax({
-            url:'/add-address',
-            type:'PATCH',
-            data:$('#addAddress').serialize(),
-            success:(response=>{
-                if(response.status){
-                    Swal.fire({
-                    icon: 'success',
-                    title: 'Address addedd succesfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                 }).then(() => {
-                    location.reload();
-              })}})})}
-
-let deleteButton = document.getElementById('delete-button')
-deleteButton.addEventListener('click',function(event){
+function closeAddressModal(){
     event.preventDefault()
-})
+    var modal = $('#addAddresModal')
+    modal.modal("hide")
+}
+
+
 // ajax function to delete address at checkout
 function deleteAddress(addressId){
     console.log(addressId)
@@ -645,6 +632,24 @@ function deleteAddress(addressId){
         }
     })
 }
+// ajax function to add adress at checkout
+function addAddress(){
+
+    $.ajax({
+            url:'/add-address',
+            type:'PATCH',
+            data:$('#addAddress').serialize(),
+            success:(response=>{
+                if(response.status){
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Address addedd succesfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                 }).then(() => {
+                    location.reload();
+              })}})})}
+
 
 const couponCodeInput = document.getElementById('checkout-discount-input');
     const couponButtons = document.querySelectorAll('.couponButton');
