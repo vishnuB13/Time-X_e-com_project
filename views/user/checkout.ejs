@@ -15,13 +15,7 @@ button#close-Modal:hover {
   background-color: darkgoldenrod;
   /* You can add more styles for the hover effect if desired */
 }
-
-
-
 </style>
-
-
-
 
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -552,11 +546,7 @@ function  razorpayPayment(order){
             var modale = $('#couponModal')
             modale.modal("show")
          })
-        
-         
-
-
-
+    
     let applycouponbutton = document.getElementById('applyCouponId')
     applycouponbutton.addEventListener('click', function(event){
         let couponCode=document.getElementById('checkout-discount-input').value
@@ -672,6 +662,4 @@ const couponCodeInput = document.getElementById('checkout-discount-input');
             modale.modal("hide")
         })
     });
-
-
 </script>
