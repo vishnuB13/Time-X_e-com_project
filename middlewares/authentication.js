@@ -39,7 +39,6 @@ let authAdmin = (req, res, next) => {
 }
 let cartCheck = async (req,res,next)=>{
 let cartItems=await Cart.find()
-        console.log(cartItems,"cartitemss")
 if(!cartItems.length){res.redirect('/')}
 else{next()}
 }
