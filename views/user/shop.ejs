@@ -1,10 +1,10 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    .page-content {
+    /* .page-content {
     padding: 30px;
 }
 
-/* Media query for smaller screens */
+
 @media (max-width: 768px) {
     .page-content {
         padding: 15px;
@@ -20,7 +20,7 @@
         width: 100%;
         margin-bottom: 20px;
     }
-}
+} */
   </style>
 </head>
 <main class="main">
@@ -39,108 +39,8 @@
     </nav><!-- End .breadcrumb-nav -->
     <div class="page-content">
         <div class="container">
-          <aside style="position: absolute; display: flex;justify-content: space-between;" class="col-lg-3 order-lg-first">
-            <div class="sidebar sidebar-shop">
-                <div class="widget widget-clean">
-                    <label>Filters:</label>   
-                </div><!-- End .widget widget-clean -->
-                <div class="widget widget-collapsible">
-                    <h3 class="widget-title">
-                        <a data-toggle="collapse" href="#" role="button" aria-expanded="true" aria-controls="widget-1">
-                            Prize Range
-                        </a>
-                    </h3><!-- End .widget-title -->
-                    <div class="collapse show" id="widget-1">
-                        <div class="widget-body">
-                            <div class="filter-items filter-items-count">
-                                <div class="filter-item">
-                                    <div  class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" checked id="price-all" name="price-filter" value="All">
-                                        <label class="custom-control-label" for="price-all">All Price</label>
-                                    </div>
-                                    <div  class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" id="price-1" name="price-filter" value="0-1000">
-                                        <label class="custom-control-label" for="price-1">₹0 - ₹1000</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" id="price-2" name="price-filter" value="1000-2000">
-                                        <label class="custom-control-label" for="price-2">₹1000 - ₹2000</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" id="price-3" name="price-filter" value="2000-3000">
-                                        <label class="custom-control-label" for="price-3">₹2000 - ₹3000</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" id="price-4" name="price-filter" value="3000-4000">
-                                        <label class="custom-control-label" for="price-4">₹3000 - ₹4000</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <input type="radio" class="custom-control-input" id="price-5" name="price-filter" value="4000-5000">
-                                        <label class="custom-control-label" for="price-5">₹4000 - ₹5000</label>
-                                    </div>
-                                </div><!-- End .filter-item -->
-                            </div><!-- End .filter-items -->
-                        </div><!-- End .widget-body -->
-                    </div><!-- End .collapse -->
-                </div><!-- End .widget -->
-                 <div class="widget widget-collapsible">
-                    <h3 class="widget-title">
-                        <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
-                            Filter by brands
-                        </a>
-                    </h3><!-- End .widget-title -->
-                    <div class="collapse show" id="widget-4">
-                        <div class="widget-body">
-                            <div class="custom-control custom-checkbox mb-1">
-                                <input type="checkbox" class="custom-control-input" checked id="brand-all" name="brand-filter" value="all brands">
-                                <label class="custom-control-label" for="brand-all">All brands</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-1">
-                                <input type="checkbox" class="custom-control-input" id="brand-3" name="brand-filter" value="titan">
-                                <label class="custom-control-label" for="brand-3">titan</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-1">
-                                <input type="checkbox" class="custom-control-input" id="brand-1" name="brand-filter" value="gshock">
-                                <label class="custom-control-label" for="brand-1">gshock</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-1">
-                              <input type="checkbox" class="custom-control-input" id="brand-2" name="brand-filter" value="rolex">
-                              <label class="custom-control-label" for="brand-2">rolex</label>
-                          </div>  
-                        </div><!-- End .widget-body -->
-                    </div><!-- End .collapse -->
-                </div><!-- End .widget -->
-
-                <div class="widget widget-collapsible">
-                  <h3 class="widget-title">
-                      <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
-                          Filter by category
-                      </a>
-                  </h3><!-- End .widget-title -->
-                  <div class="collapse show" id="widget-4">
-                      <div class="widget-body">
-                          <div class="custom-control custom-checkbox mb-1">
-                              <input type="checkbox" class="custom-control-input" checked id="category-all" name="category-filter" value="all category">
-                              <label class="custom-control-label" for="category-all">All category</label>
-                          </div>
-                          <div class="custom-control custom-checkbox mb-1">
-                              <input type="checkbox" class="custom-control-input" id="category-3" name="category-filter" value="men">
-                              <label class="custom-control-label" for="category-3">Men</label>
-                          </div>
-                          <div class="custom-control custom-checkbox mb-1">
-                              <input type="checkbox" class="custom-control-input" id="category-1" name="category-filter" value="women">
-                              <label class="custom-control-label" for="category-1">women</label>
-                          </div>
-                          <div class="custom-control custom-checkbox mb-1">
-                            <input type="checkbox" class="custom-control-input" id="category-2" name="category-filter" value="child">
-                            <label class="custom-control-label" for="category-2">Kids</label>
-                        </div>  
-                      </div><!-- End .widget-body -->
-                  </div><!-- End .collapse -->
-              </div>
-            </div><!-- End .sidebar sidebar-shop -->
-        </aside><!-- End .col-lg-3 -->
-            <div style="position: relative;margin-left: 300px;" class="main-wrap">
+          
+           <div class="row">
                 <div class="col-lg-9">
                     <div class="toolbox">
                         <div class="toolbox-left">
@@ -212,8 +112,110 @@
                         </nav>
                         <!-- End Pagination -->    
                 </div><!-- End .col-lg-9 -->    
-            </div><!-- End .row -->
-        </div><!-- End .container -->
+                <aside class="col-lg-3 order-lg-first">
+                  <div class="sidebar sidebar-shop">
+                      <div class="widget widget-clean">
+                          <label>Filters:</label>   
+                      </div><!-- End .widget widget-clean -->
+                      <div class="widget widget-collapsible">
+                          <h3 class="widget-title">
+                              <a data-toggle="collapse" href="#" role="button" aria-expanded="true" aria-controls="widget-1">
+                                  Prize Range
+                              </a>
+                          </h3><!-- End .widget-title -->
+                          <div class="collapse show" id="widget-1">
+                              <div class="widget-body">
+                                  <div class="filter-items filter-items-count">
+                                      <div class="filter-item">
+                                          <div  class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" checked id="price-all" name="price-filter" value="All">
+                                              <label class="custom-control-label" for="price-all">All Price</label>
+                                          </div>
+                                          <div  class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" id="price-1" name="price-filter" value="0-1000">
+                                              <label class="custom-control-label" for="price-1">₹0 - ₹1000</label>
+                                          </div>
+                                          <div class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" id="price-2" name="price-filter" value="1000-2000">
+                                              <label class="custom-control-label" for="price-2">₹1000 - ₹2000</label>
+                                          </div>
+                                          <div class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" id="price-3" name="price-filter" value="2000-3000">
+                                              <label class="custom-control-label" for="price-3">₹2000 - ₹3000</label>
+                                          </div>
+                                          <div class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" id="price-4" name="price-filter" value="3000-4000">
+                                              <label class="custom-control-label" for="price-4">₹3000 - ₹4000</label>
+                                          </div>
+                                          <div class="custom-control custom-checkbox mb-1">
+                                              <input type="radio" class="custom-control-input" id="price-5" name="price-filter" value="4000-5000">
+                                              <label class="custom-control-label" for="price-5">₹4000 - ₹5000</label>
+                                          </div>
+                                      </div><!-- End .filter-item -->
+                                  </div><!-- End .filter-items -->
+                              </div><!-- End .widget-body -->
+                          </div><!-- End .collapse -->
+                      </div><!-- End .widget -->
+                       <div class="widget widget-collapsible">
+                          <h3 class="widget-title">
+                              <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+                                  Filter by brands
+                              </a>
+                          </h3><!-- End .widget-title -->
+                          <div class="collapse show" id="widget-4">
+                              <div class="widget-body">
+                                  <div class="custom-control custom-checkbox mb-1">
+                                      <input type="checkbox" class="custom-control-input" checked id="brand-all" name="brand-filter" value="all brands">
+                                      <label class="custom-control-label" for="brand-all">All brands</label>
+                                  </div>
+                                  <div class="custom-control custom-checkbox mb-1">
+                                      <input type="checkbox" class="custom-control-input" id="brand-3" name="brand-filter" value="titan">
+                                      <label class="custom-control-label" for="brand-3">titan</label>
+                                  </div>
+                                  <div class="custom-control custom-checkbox mb-1">
+                                      <input type="checkbox" class="custom-control-input" id="brand-1" name="brand-filter" value="gshock">
+                                      <label class="custom-control-label" for="brand-1">gshock</label>
+                                  </div>
+                                  <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" id="brand-2" name="brand-filter" value="rolex">
+                                    <label class="custom-control-label" for="brand-2">rolex</label>
+                                </div>  
+                              </div><!-- End .widget-body -->
+                          </div><!-- End .collapse -->
+                      </div><!-- End .widget -->
+      
+                      <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                            <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+                                Filter by category
+                            </a>
+                        </h3><!-- End .widget-title -->
+                        <div class="collapse show" id="widget-4">
+                            <div class="widget-body">
+                                <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" checked id="category-all" name="category-filter" value="all category">
+                                    <label class="custom-control-label" for="category-all">All category</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" id="category-3" name="category-filter" value="men">
+                                    <label class="custom-control-label" for="category-3">Men</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" id="category-1" name="category-filter" value="women">
+                                    <label class="custom-control-label" for="category-1">women</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-1">
+                                  <input type="checkbox" class="custom-control-input" id="category-2" name="category-filter" value="child">
+                                  <label class="custom-control-label" for="category-2">Kids</label>
+                              </div>  
+                            </div><!-- End .widget-body -->
+                        </div><!-- End .collapse -->
+                    </div>
+                  </div><!-- End .sidebar sidebar-shop -->
+              </aside><!-- End .col-lg-3 -->
+            <!-- End .row -->
+        </div>
+      </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 
