@@ -11,10 +11,6 @@ var instance = new Razorpay({
 
 module.exports = {
   placeOrder: async (addressfind, paymentOption, paymentStatus, deliveryStatus, userId, cartProductData, cartTotal,orderId,discountAmount,discount,totals) => {
-    console.log(cartTotal);
-    console.log(cartProductData);
-    console.log(deliveryStatus)
-    console.log(orderId)
   let totalAmount = cartTotal[0].total-cartTotal[0].discount
    console.log(totalAmount)
     // Create an array to hold the product objects
