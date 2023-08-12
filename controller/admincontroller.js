@@ -55,7 +55,6 @@ const getAdminHome = async(req,res)=>{
     if(req.session.adminLoggedIn){
         let orderTotal=await orderHelpers.orderTotal()
         let order = await Order.find({deliveryStatus:"order delivered"})
-        console.log(order,"orderdelivered")
         let product = await Product.find()
         let category = await Category.find({deleted:false})
         let totalSales = await salesHelpers.totalSales();
@@ -96,7 +95,7 @@ const salesReport =async (req,res)=>{
     if(weeklyReport.length > 0){
         render = true;
     }
-    res.render('admin/salesReport',
+    res.render('admin/salesreport',
        {admins:true,
         weeklyReport,
         weekTotal,
