@@ -29,25 +29,6 @@ The project also integrates several APIs including Twilio, Axios, and Razorpay t
 - Razorpay account for payment integration
 - Twilio account for SMS notifications
 
-###Project Structure
-
-ecommerce-watches/
-│
-├── public/               # Static files (CSS, JS, images)
-│
-├── src/
-│   ├── controllers/      # Controllers for handling requests
-│   ├── models/           # Mongoose models
-│   ├── routes/           # Express routes
-│   ├── views/            # EJS templates for rendering views
-│   ├── app.js            # Express app setup
-│   └── config/           # Configuration files (database, APIs)
-│
-├── .env                  # Environment variables
-├── .gitignore            # Git ignore file
-├── package.json          # NPM dependencies and scripts
-├── README.md             # Project documentation
-└── server.js             # Server entry point
 
 ###Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
